@@ -1,7 +1,7 @@
 // 공유용 이미지 카드 (canvas) — 같이 먹은 식사 카드 4:5, 개인 리포트·월말 결산 9:16(인스타 스토리).
 // BLUE TABLE: 코발트 + 백자, 음식 사진은 원형 접시에 담고 글꼴은 Pretendard 800 하나.
-import { loadImage } from './image.js?v=202610181846';
-import { METRICS, dateLabelLong, fmt1, monthLabel } from './logic.js?v=202610181846';
+import { loadImage } from './image.js?v=202610181942';
+import { METRICS, dateLabelLong, fmt1, monthLabel } from './logic.js?v=202610181942';
 
 const FONT = "'Pretendard Variable', Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif";
 // 앱 토큰(css/app.css :root)과 같은 값. 캔버스는 CSS 변수를 못 읽어 값을 옮겨 둔다.

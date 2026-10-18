@@ -5,10 +5,10 @@
 // v1.9: 익명 집계 예시 분포와 계정별 집계 제외.
 // v2.0: 경험 인증·전문가 평점·리스트. 합성 수치는 demo 전용 필드로 분리한다.
 // v2.1: 타인은 공개 기록만 집계하고 전문가 기준·기간 조회를 실제 저장소와 맞춘다.
-import { addDays, ymd, timeOptions, normPlace } from './logic.js?v=202610181846';
-import { blobToDataURL } from './image.js?v=202610181846';
-import { uuid } from './util.js?v=202610181846';
-import { reportInput } from './moderation.js?v=202610181846';
+import { addDays, ymd, timeOptions, normPlace } from './logic.js?v=202610181942';
+import { blobToDataURL } from './image.js?v=202610181942';
+import { uuid } from './util.js?v=202610181942';
+import { reportInput } from './moderation.js?v=202610181942';
 
 const KEY = 'hanip-demo-v5';
 const ME = 'u-me';

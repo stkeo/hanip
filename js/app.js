@@ -3,16 +3,16 @@
 // v1.9: 익명 전체 통계 참여 설정과 전체 상위 백분위.
 // v2.0: 경험 인증·그릇 수·리스트·시즌 도전. 새 store 함수는 지원할 때만 호출한다.
 // v2.1: 공개 집계 기준 표시·평가자 최소 5명·기간 조회로 챌린지 이력 보존.
-import { h, icon, wordmark, toast, copyText, timeLabel, groupBy } from './util.js?v=202610181846';
+import { h, icon, wordmark, toast, copyText, timeLabel, groupBy } from './util.js?v=202610181942';
 import {
   METRICS, REACTIONS, RANK_SORTS, ymd, addDays, dateLabel, monthOf, shiftMonth, monthLabel, fmt1, fmtPrice,
   parsePrice, normPlace, josa, detectMealCards, todayProgress, monthSummary, reactionSummary, pendingTags,
   placeRanking, wishlist, INVITE_STATUS, slotGrid, choiceLabel, CATEGORIES, suggestCategory, monthlyTaste, streak, titlesFor, pickPlace, byArea, parseYmd,
   bowlTier, challengeProgress, groupAlertSummary,
-} from './logic.js?v=202610181846';
-import { compressPhoto } from './image.js?v=202610181846';
-import { REPORT_REASONS, contentHidden, visibleContent } from './moderation.js?v=202610181846';
-import { drawMealCard, drawMonthCard, drawReportCard, shareCanvas } from './cards.js?v=202610181846';
+} from './logic.js?v=202610181942';
+import { compressPhoto } from './image.js?v=202610181942';
+import { REPORT_REASONS, contentHidden, visibleContent } from './moderation.js?v=202610181942';
+import { drawMealCard, drawMonthCard, drawReportCard, shareCanvas } from './cards.js?v=202610181942';
 
 const APP = '한입';
 const FEATURES = { named: false }; // 4주 친구 모임 출시: 공개 층은 보존하고 진입만 끈다.
@@ -83,12 +83,12 @@ async function boot() {
   }
   try {
     if (!forceDemo && cfg.supabaseUrl && cfg.supabaseAnonKey) {
-      const { createSupabaseStore } = await import('./store-supabase.js?v=202610181846');
+      const { createSupabaseStore } = await import('./store-supabase.js?v=202610181942');
       captchaSiteKey = typeof cfg.captchaSiteKey === 'string' ? cfg.captchaSiteKey.trim() : '';
       storeFactory = (opts) => createSupabaseStore(cfg, opts);
       state.store = await storeFactory();
     } else {
-      const { createDemoStore } = await import('./store-demo.js?v=202610181846');
+      const { createDemoStore } = await import('./store-demo.js?v=202610181942');
       storeFactory = () => createDemoStore();
       state.store = await storeFactory();
     }
@@ -927,14 +927,14 @@ function renderStart({ mode = 'create', code = '' }) {
   const form = (kind) => {
     const f = h('form', { class: 'form start-form', autocomplete: 'off' });
     const fields = kind === 'create'
-      ? [h('label', {}, '모임 이름', h('input', { name: 'name', maxlength: 30, placeholder: '예: 대학 동기 밥모임', required: true }))]
+      ? [h('label', {}, '모임 이름', h('input', { name: 'name', maxlength: 30, placeholder: '예: 내 밥 일기, 동기 밥모임', required: true }))]
       : [h('label', {}, '초대 코드', h('input', { name: 'code', maxlength: 8, value: code, placeholder: '6자리', required: true, autocapitalize: 'characters', class: 'start-code' }))];
     fields.push(
       h('label', {}, '닉네임', h('input', { name: 'nickname', maxlength: 12, placeholder: '예: 민지', required: true })),
-      h('label', {}, '비밀번호 4자리',
+      h('label', {}, '기록 찾기 번호 4자리',
         h('input', { name: 'pin', type: 'password', inputmode: 'numeric', pattern: '[0-9]{4}', maxlength: 4, placeholder: '••••',
           autocomplete: 'off', required: true, class: 'start-pin' }),
-        h('small', {}, '폰을 바꾸면 이 번호로 기록을 찾아요.')));
+        h('small', {}, '폰이나 브라우저가 바뀌면 초대 코드와 이 번호로 기록을 찾아요.')));
     const age = h('input', { type: 'checkbox', name: 'age14', required: true });
     const terms = h('input', { type: 'checkbox', name: 'terms', required: true, 'aria-label': '이용 규칙에 동의해요' });
     const submit = h('button', { class: 'btn primary wide', type: 'submit', disabled: true }, kind === 'create' ? '모임 만들기' : '들어가기');
@@ -978,7 +978,7 @@ function renderStart({ mode = 'create', code = '' }) {
       if (!age.checked) return toast('만 14세 이상인지 확인해 주세요');
       if (!terms.checked) return toast('이용 규칙에 동의해 주세요');
       const d = Object.fromEntries(new FormData(f));
-      if (!/^[0-9]{4}$/.test(d.pin || '')) return toast('비밀번호는 숫자 4자리예요');
+      if (!/^[0-9]{4}$/.test(d.pin || '')) return toast('번호는 숫자 4자리예요');
       if (captchaNeeded() && !captchaToken) return toast('사람인지 확인해 주세요');
       busy = true;
       submit.disabled = true;
@@ -1001,7 +1001,7 @@ function renderStart({ mode = 'create', code = '' }) {
         await refreshGroups();
         setGroup(g.id);
         toast(g.status === 'reclaimed' ? '기록을 찾았어요' : g.status === 'already' ? '이미 들어와 있어요' : '들어왔어요');
-        go(kind === 'create' ? 'settings' : 'feed');
+        go('feed');
       } catch (e) {
         toast(e.message === 'demo_join_unavailable' ? '체험 모드에선 새 모임에 들어갈 수 없어요' : e.message, 3200);
       } finally {
@@ -1099,7 +1099,7 @@ async function renderFeed() {
     nodes.push(h('section', { class: 'feed-empty' },
       h('h1', { class: 'page-title' }, '우리의 첫 한입을 남겨볼까요?'),
       h('img', { class: 'feed-empty-art', src: 'img/empty-plates.jpg', alt: '', 'aria-hidden': 'true', decoding: 'async' }),
-      h('p', {}, '오늘 먹은 거 먼저 올려볼까요?'),
+      h('p', {}, '혼자 먼저 써도 돼요. 친구는 언제든 부를 수 있어요.'),
       h('a', { class: 'btn primary wide', href: '#/post' }, icon('plus', 20), '첫 한입 올리기'),
       h('button', { type: 'button', class: 'btn wide', onclick: () => go('settings') }, icon('people', 20), '친구 부르기')));
   }
@@ -1508,7 +1508,7 @@ async function renderPost(params = new URLSearchParams()) {
       h('div', { class: 'post-receipt-actions' },
         h('button', { class: 'btn small', type: 'button', onclick: () => receiptInput.click() }, '영수증 인증'), receiptRemove),
       receiptStatus,
-      h('p', { class: 'sub-line' }, demo ? '체험에선 적은 가게와 날짜로 확인해요' : '실서비스에선 자동으로 읽어요'),
+      h('p', { class: 'sub-line' }, demo ? '체험에선 적은 가게와 날짜로 확인해요' : '영수증 글자는 아직 읽지 않아요'),
       !demo ? h('p', { class: 'sub-line' }, '지금은 적은 가게와 날짜로 확인해요') : null)) : null;
   drawReceipt();
   const drawCategories = () => { categorySelect.value = form.category; };
@@ -3243,7 +3243,7 @@ async function renderGroup() {
       h('span', { class: 'row-label' }, '앱처럼 쓰기'),
       h('p', {}, '아이폰은 Safari 공유 버튼에서 홈 화면에 추가'),
       h('p', {}, '안드로이드는 Chrome 메뉴에서 홈 화면에 추가'),
-      h('p', {}, `폰을 바꾸면: "코드로 들어가기"에서 이 모임 코드 + 닉네임 '${g.myNickname}' + 내 4자리 번호`)),
+      h('p', {}, `폰이나 브라우저가 바뀌면: "초대 코드로 들어가기"에서 초대 코드 + 닉네임 '${g.myNickname}' + 내 4자리 번호`)),
     state.store.mode === 'demo'
       ? h('section', { class: 'card help' },
         h('span', { class: 'row-label' }, '체험 모드'),
