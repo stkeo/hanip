@@ -1,0 +1,59 @@
+/* 이용 규칙과 개인정보 처리방침 공통 레이아웃. 색과 글꼴은 BLUE TABLE 토큰을 쓴다. */
+@import url("./app.css");
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.65; letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: anywhere;
+    }
+    a { color: inherit; text-underline-offset: 3px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      width: 100%; max-width: 640px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 8px) 16px 8px;
+      background: color-mix(in srgb, var(--bg) 90%, transparent);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .brand { display: flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 800; font-size: 18px; text-decoration: none; }
+    .brand img { width: 26px; height: 26px; }
+    .back {
+      display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 12px;
+      background: var(--paper); border: 1px solid var(--line); font-size: 14px; font-weight: 700; text-decoration: none;
+    }
+    main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(env(safe-area-inset-bottom) + 48px); }
+    h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin: 10px 0 4px; }
+    .meta { color: var(--sub); font-size: 13px; font-weight: 600; margin: 0 0 14px; }
+    h2 {
+      width: fit-content; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; margin: 30px 0 10px; padding: 0 3px;
+      color: var(--blue);
+    }
+    h3 { font-size: 15px; font-weight: 800; margin: 18px 0 6px; }
+    p { margin: 0 0 10px; }
+    ul, ol { margin: 0 0 10px; padding-left: 20px; }
+    li { margin: 4px 0; }
+    .card { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 12px; }
+    .card ul { margin: 0; }
+    .summary li b { font-weight: 800; }
+    .note { color: var(--sub); font-size: 14px; }
+    .fill { background: var(--paper-2); border-radius: 6px; padding: 0 4px; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin: 0 0 12px; font-size: 14px; }
+    th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    thead th { background: var(--paper-2); font-size: 13px; font-weight: 800; color: var(--sub); }
+    tbody th { font-weight: 800; width: 34%; }
+    tr:last-child > * { border-bottom: 0; }
+    code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; background: var(--paper-2); padding: 1px 5px; border-radius: 5px; }
+    .foot { margin-top: 32px; color: var(--sub); font-size: 13px; }
+    /* 좁은 화면: 표를 한 줄씩 쌓는다 */
+    @media (max-width: 520px) {
+      table, thead, tbody, tr, th, td { display: block; }
+      thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+      tr { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+      tr:last-child { border-bottom: 0; }
+      th, td { padding: 0; border: 0; width: auto; }
+      tbody th { margin-bottom: 2px; }
+      td[data-label]::before { content: attr(data-label); display: block; color: var(--sub); font-size: 13px; font-weight: 700; margin-top: 6px; }
+      tbody th + td[data-label]::before { margin-top: 0; }
+    }
+
+    main a { display: inline-flex; align-items: center; min-height: 44px; }
+    main h1, main h2, main h3 { line-height: 1.4; }

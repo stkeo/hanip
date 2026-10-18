@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>한입 이용 규칙</title>
+  <meta name="description" content="한입을 함께 쓰기 위한 약속과 신고 방법을 알려 드려요.">
+  <meta name="theme-color" content="#FAFCFF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#101B2D" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <!-- 원문: Desktop\앱\맛집기록\개인정보처리방침_초안_2026-09-25.md — 이번 변경 문단은 docs/privacy-draft-patch.md에 기록한다. -->
+  <link rel="stylesheet" href="css/legal.css">
+  <!-- prefers-color-scheme: dark 테마는 app.css 공통 토큰을 따른다. -->
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./#/feed"><img src="icons/icon.svg" alt="" width="26" height="26">한입</a>
+    <a class="back" href="./#/me" data-back>앱으로 돌아가기</a>
+  </header>
+
+  <main>
+    <h1>이용 규칙</h1>
+    <p class="meta">시행일 2026년 10월 18일</p>
+    <div class="card">
+      <p>한입은 만 14세 이상인 친구들이 먹은 기록을 나누는 곳이에요. 서로 편하게 쓸 수 있도록 아래 약속을 지켜 주세요.</p>
+    </div>
+    <h2>올리면 안 되는 내용</h2>
+    <ul>
+      <li>불법적인 내용이나 불법 행위를 권하는 내용</li>
+      <li>음란하거나 폭력을 조장하는 글과 사진</li>
+      <li>특정 사람이나 집단을 향한 혐오와 차별</li>
+      <li>욕설, 위협, 반복적인 연락 등 괴롭힘</li>
+      <li>스팸과 반복 광고</li>
+      <li>동의 없이 올리는 다른 사람의 개인정보</li>
+      <li>남이 찍은 사진을 가져와 올리는 행동</li>
+      <li>실제 유명인이나 다른 사람을 사칭하는 행동</li>
+    </ul>
+    <p>글과 사진, 댓글, 채팅 메시지, 프로필에 모두 적용돼요. 사진은 직접 찍은 것만 올려 주세요.</p>
+    <h2>신고와 조치</h2>
+    <p>규칙을 어긴 글이나 댓글, 채팅 메시지, 멤버 프로필은 더보기에서 신고할 수 있어요. 사유를 고르고 필요한 내용을 200자 안으로 덧붙여 주세요.</p>
+    <p>같은 대상은 한 번만 신고할 수 있고 하루 20건까지 접수해요. 하루는 한국 시간 자정을 기준으로 해요.</p>
+    <p>신고하면 그 대상이 내 화면에서 바로 숨겨져요. 되돌릴 수 없어요. 신고 숨김 목록은 이 브라우저에 보관해요.</p>
+    <p>운영자가 신고 내용을 확인한 뒤 글 삭제나 이용 제한 등 필요한 조치를 해요. 상대에게 신고자와 차단 여부를 알리지 않아요.</p>
+    <h2>친구 차단</h2>
+    <p>멤버 프로필의 더보기나 1:1 대화 정보에서 차단할 수 있어요. 차단한 친구의 글과 댓글, 채팅 메시지와 1:1 대화를 내 화면에서 숨겨요. 모임과 순위 집계는 유지돼요. 같은 메뉴나 모임 설정에서 차단을 풀 수 있어요.</p>
+    <h2>문의</h2>
+    <div class="card">
+      <p>운영자 김건우</p>
+      <p><a href="mailto:govl5088@gmail.com">govl5088@gmail.com</a></p>
+    </div>
+    <p>개인정보를 다루는 방법은 <a href="privacy.html">개인정보 처리방침</a>에서 확인해 주세요.</p>
+    <p class="foot">시행일 2026년 10월 18일</p>
+    <a class="back" href="./#/me" data-back>앱으로 돌아가기</a>
+  </main>
+  <script>
+    // 들어온 앱 화면으로 되돌린다: 같은 탭에서 왔으면 뒤로 가기(초대 링크 #/join/코드·입력 내용·개발용 ?demo 유지),
+    // 바로 열었으면 './#/me'. 주소 뒷부분(?demo)은 들어온 주소에서만 가져온다.
+    (function () {
+      var ref = null;
+      try { ref = document.referrer ? new URL(document.referrer) : null; } catch (e) { ref = null; }
+      var same = !!ref && ref.origin === location.origin && !/terms.html$/.test(ref.pathname);
+      document.querySelectorAll('a[data-back]').forEach(function (a) {
+        if (same && ref.search) a.setAttribute('href', './' + ref.search + '#/me');
+        a.addEventListener('click', function (ev) {
+          if (same && history.length > 1) { ev.preventDefault(); history.back(); }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

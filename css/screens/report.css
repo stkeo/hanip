@@ -1,0 +1,201 @@
+/* 개인 월간 리포트(.scr-report) · 시작 화면(.scr-start) — BLUE TABLE R11·R12·R13·R02
+   선택자는 두 루트 클래스 아래로만. 색은 app.css 토큰만 쓴다. */
+
+/* ================= 리포트: 머리줄 ================= */
+
+.scr-report .report-month-nav {
+  display: flex; align-items: center; justify-content: center; gap: 2px; min-width: 0;
+}
+.scr-report .report-month-nav h1 {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  margin: 0; font-size: 18px; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; white-space: nowrap;
+}
+.scr-report .report-month-nav .icon-btn { color: var(--ink); }
+.scr-report .report-month-nav .icon-btn:disabled { color: var(--star-off); }
+
+/* ================= 리포트: 슬라이드 카드 ================= */
+
+.scr-report .report-slide {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: min(600px, calc(100svh - 236px));
+  padding: 28px 20px 26px; border-radius: 20px;
+  text-align: center; touch-action: pan-y; cursor: pointer;
+}
+.scr-report .report-slide::before,
+.scr-report .report-slide::after { content: none; }
+.scr-report .report-slide > * { position: relative; z-index: 1; max-width: 100%; }
+.scr-report .report-slide p { margin: 0; }
+
+.scr-report .report-slide.blue { background: var(--blue-fill); color: var(--on-blue); border: 1px solid var(--blue-fill); }
+.scr-report .report-slide.white { background: var(--paper); color: var(--ink); border: 1px solid var(--blue); }
+
+.scr-report .report-slide .report-eyebrow { font-size: 17px; font-weight: 700; line-height: 1.35; margin: 0 0 6px; }
+.scr-report .report-slide.blue .report-eyebrow { color: var(--on-blue-sub); }
+.scr-report .report-slide.white .report-eyebrow { color: var(--blue); font-weight: 800; }
+
+.scr-report .report-slide h2 {
+  margin: 0; font-size: 32px; font-weight: 800; line-height: 1.18; letter-spacing: -0.045em; color: inherit;
+  overflow-wrap: anywhere;
+}
+.scr-report .report-slide .report-number {
+  margin: 2px 0 0; font-size: 72px; font-weight: 800; line-height: 1.05; letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.scr-report .report-slide .report-highlight { font-size: 20px; font-weight: 700; line-height: 1.35; margin: 6px 0 0; }
+.scr-report .report-slide .report-note { font-size: 14px; font-weight: 500; line-height: 1.4; margin-top: 4px; }
+.scr-report .report-slide.blue .report-note { color: var(--on-blue-sub); }
+.scr-report .report-slide.white .report-note { color: var(--faint); }
+.scr-report .report-slide .report-foot,
+.scr-report .report-slide .report-place { font-size: 18px; font-weight: 800; line-height: 1.35; margin-top: 4px; }
+.scr-report .report-slide .report-place { font-size: 26px; letter-spacing: -0.03em; }
+.scr-report .report-slide .report-rank {
+  margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line);
+  color: var(--blue); font-size: 15px; font-weight: 700;
+}
+.scr-report .report-slide .report-caption { margin-top: 2px; font-size: 14px; line-height: 1.4; color: var(--sub); }
+
+/* 2장 최애 음식: 큰 코발트 음식 이름 + 큰 잉크 그릇 수 */
+.scr-report .report-slide[data-slide="2"] h2 { font-size: 60px; line-height: 1.08; color: var(--blue); }
+.scr-report .report-slide[data-slide="2"] .report-number { font-size: 52px; color: var(--ink); }
+.scr-report .report-slide[data-slide="2"] .report-highlight { font-size: 22px; font-weight: 800; }
+
+/* 4장 자주 간 가게 */
+.scr-report .report-slide[data-slide="4"] h2 { font-size: 40px; }
+.scr-report .report-slide .report-number.accent { font-size: 60px; color: var(--blue); margin-top: 0; }
+.scr-report .report-slide[data-slide="4"] .report-highlight { font-size: 26px; font-weight: 800; margin-top: 0; }
+
+/* 6장 공유 */
+.scr-report .report-slide .report-final-title { font-size: 48px; line-height: 1.1; }
+.scr-report .report-slide[data-slide="6"] .report-highlight { font-size: 24px; font-weight: 800; }
+.scr-report .report-slide .report-share {
+  margin-top: 14px; min-height: 52px; font-size: 18px; font-weight: 800;
+  background: var(--on-blue); border-color: var(--on-blue); color: var(--blue-fill);
+}
+.scr-report .report-slide .report-share:active { background: var(--soft); border-color: var(--soft); }
+.scr-report .report-slide .report-share:disabled { background: var(--on-blue-sub); border-color: var(--on-blue-sub); color: var(--blue-fill); opacity: 0.75; }
+
+/* ---- 원형 접시(사진) ---- */
+
+.scr-report .rp-dish-wrap {
+  position: relative; display: grid; place-items: center;
+  margin: 18px auto 14px;
+}
+.scr-report .rp-dish-wrap.big { width: min(232px, 60vw); aspect-ratio: 1; }
+.scr-report .rp-dish-wrap.small { width: 104px; height: 104px; margin: 0; }
+.scr-report .rp-dish-wrap .plate { position: relative; z-index: 1; }
+.scr-report .rp-dish-wrap.big .plate { --ps: min(208px, 56vw); }
+.scr-report .rp-dish {
+  position: relative; z-index: 1; display: block; width: 100%; height: 100%;
+  padding: 10px; border-radius: 50%; background: var(--on-blue);
+  box-shadow: inset 0 0 0 5px var(--on-blue), inset 0 0 0 7px var(--blue-fill), 0 0 0 1.5px var(--blue-fill), var(--shadow);
+}
+.scr-report .rp-dish-wrap.small .rp-dish { padding: 6px; box-shadow: inset 0 0 0 3px var(--on-blue), inset 0 0 0 4.5px var(--blue-fill), 0 0 0 1.5px var(--blue-fill); }
+.scr-report .rp-dish-photo { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.scr-report .rp-dish .nophoto { background: var(--on-blue); }
+.scr-report .rp-lemon {
+  position: absolute; z-index: 0; width: 34%; aspect-ratio: 1; border-radius: 50%; background: var(--lemon);
+}
+.scr-report .lemon-low .rp-lemon { right: -12%; bottom: 4%; }
+.scr-report .lemon-high .rp-lemon { right: -10%; top: 2%; }
+
+/* ---- 3장 칭호 원 ---- */
+
+.scr-report .report-title-ring {
+  display: grid; place-items: center; width: min(236px, 62vw); aspect-ratio: 1; margin: 16px auto 18px;
+  padding: 30px; border-radius: 50%; background: var(--on-blue);
+  box-shadow: inset 0 0 0 9px var(--on-blue), inset 0 0 0 11.5px var(--blue-fill),
+    inset 0 0 0 16px var(--on-blue), inset 0 0 0 17.5px var(--blue-fill), 0 8px 20px rgba(0, 0, 0, 0.16);
+}
+.scr-report .report-title-ring h2 { font-size: 42px; line-height: 1.12; color: var(--blue-fill); }
+.scr-report .report-title-ring h2 span { display: block; }
+.scr-report .report-slide[data-slide="3"] .report-highlight { font-size: 22px; font-weight: 800; }
+.scr-report .report-subtitles {
+  width: 100%; margin-top: 18px; padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--on-blue) 45%, transparent);
+  display: grid; gap: 12px;
+}
+.scr-report .report-subtitle h3 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; }
+.scr-report .report-subtitle p { font-size: 15px; font-weight: 500; color: var(--on-blue-sub); }
+
+/* ---- 5장 내가 높게 준 집 ---- */
+
+.scr-report .report-slide[data-slide="5"] { align-items: stretch; text-align: left; justify-content: flex-start; }
+.scr-report .report-slide .report-awards-title { font-size: 30px; text-align: center; margin: 0 0 8px; }
+.scr-report .report-award { padding: 14px 4px 16px; }
+.scr-report .report-award + .report-award { border-top: 1px solid var(--line); }
+.scr-report .report-award-label { color: var(--blue); font-size: 18px; font-weight: 800; }
+.scr-report .report-award h3 { margin: 2px 0 10px; font-size: 22px; font-weight: 800; letter-spacing: -0.03em; overflow-wrap: anywhere; }
+.scr-report .report-award-body { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 16px; align-items: center; }
+.scr-report .report-award-score { display: flex; align-items: center; gap: 6px; }
+.scr-report .report-award-score .ic { color: var(--gold); flex: none; }
+.scr-report .report-award-score b { font-size: 40px; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.scr-report .report-award-metric { font-size: 17px; font-weight: 700; }
+
+/* ---- 빈 접시(기록 0개 · 탐험) ---- */
+
+.scr-report .report-empty-plate {
+  display: block; width: min(240px, 62vw); aspect-ratio: 1; margin: 20px auto 28px; border-radius: 50%;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 10px var(--paper), inset 0 0 0 12.5px var(--blue-fill),
+    inset 0 0 0 17px var(--paper), inset 0 0 0 18.5px var(--blue-fill), 0 2px 4px rgba(23, 42, 58, 0.06), 0 10px 26px rgba(36, 75, 219, 0.14);
+}
+.scr-report .report-empty-plate.small { width: 120px; margin: 16px auto; background: var(--on-blue);
+  box-shadow: inset 0 0 0 6px var(--on-blue), inset 0 0 0 8px var(--blue-fill), inset 0 0 0 11px var(--on-blue), inset 0 0 0 12px var(--blue-fill), 0 0 0 1.5px var(--blue-fill); }
+
+.scr-report .report-empty { text-align: center; padding: 20px 0 8px; }
+.scr-report .report-empty .report-eyebrow { color: var(--blue); font-size: 17px; font-weight: 800; margin: 8px 0 0; }
+.scr-report .report-empty h2 { margin: 0; font-size: 32px; font-weight: 800; line-height: 1.22; letter-spacing: -0.045em; }
+.scr-report .report-empty h2 span { display: block; }
+.scr-report .report-empty-sub { margin: 10px 0 32px; color: var(--sub); font-size: 17px; font-weight: 500; }
+
+/* ================= 리포트: 진행·이동 ================= */
+
+.scr-report .report-progress { display: flex; gap: 6px; padding: 0; margin: 4px 0 -8px; }
+.scr-report .report-progress button {
+  flex: 1; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; position: relative;
+}
+.scr-report .report-progress button::before {
+  content: ''; position: absolute; inset: 0 auto 0 50%; width: max(100%, 44px); transform: translateX(-50%);
+}
+.scr-report .report-progress button::after {
+  content: ''; position: absolute; inset: 18px 0; border-radius: 999px; background: var(--soft-2);
+}
+.scr-report .report-progress button.done::after { background: var(--blue-fill); }
+.scr-report .report-page {
+  margin: 0 0 10px; color: var(--ink); font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums;
+}
+.scr-report .report-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 12px; }
+.scr-report .report-controls .btn { min-height: 52px; font-size: 17px; }
+
+/* ================= 시작 화면 ================= */
+
+.scr-start .start-head {
+  position: static; display: flex; justify-content: space-between; align-items: center;
+  margin: 0 0 6px; padding: calc(env(safe-area-inset-top) + 14px) 0 0; min-height: 56px; background: transparent;
+}
+.scr-start .start-head .icon-btn { color: var(--ink); margin-right: -10px; }
+.scr-start .start-title { margin: 6px 0 18px; font-size: 32px; font-weight: 800; line-height: 1.25; letter-spacing: -0.045em; }
+.scr-start .start-title span { display: block; }
+.scr-start .start-hero {
+  width: 100%; aspect-ratio: 5 / 2; object-fit: cover; border-radius: 16px; margin: 0 0 18px; background: var(--soft);
+}
+.scr-start .start-seg { gap: 0; margin: 0 0 18px; border-bottom: 0; }
+.scr-start .start-seg button {
+  min-height: 48px; font-size: 15px; font-weight: 600; color: var(--sub); background: var(--soft);
+}
+.scr-start .start-seg button:first-child { border-radius: 12px 0 0 0; }
+.scr-start .start-seg button:last-child { border-radius: 0 12px 0 0; }
+.scr-start .start-seg button.on { background: var(--paper); color: var(--blue); font-weight: 800; box-shadow: inset 0 -3px 0 var(--blue); }
+.scr-start .start-form label { color: var(--ink); font-size: 14px; font-weight: 600; margin-bottom: 14px; }
+.scr-start .start-form label input { border-color: var(--line-strong); }
+.scr-start .start-form .start-age { display: flex; align-items: center; gap: 10px; min-height: 44px; margin-bottom: 0; cursor: pointer; }
+.scr-start .start-age input { width: 22px; height: 22px; margin: 0; flex: none; }
+.scr-start .start-form .privacy-consent { margin: 0 0 12px; text-align: left; }
+.scr-start .start-form .start-code { text-transform: uppercase; letter-spacing: 0.08em; }
+.scr-start .start-form .start-pin { letter-spacing: 0.4em; font-size: 18px; }
+.scr-start .start-form small, .scr-start .hint { font-size: 15px; font-weight: 500; line-height: 1.5; }
+.scr-start .start-form .btn.primary { margin-top: 4px; font-size: 17px; }
+.scr-start .privacy-consent { text-align: center; font-size: 15px; line-height: 1.5; margin: 18px 0 8px; color: var(--sub); }
+.scr-start .privacy-consent a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+.scr-start .back-home { margin-top: 4px; }

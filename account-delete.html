@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>계정 삭제 · 한입 · 오늘 뭐 먹었어?</title>
+  <meta name="description" content="한입 · 오늘 뭐 먹었어?의 계정과 기록을 앱에서 삭제하거나 이메일로 삭제를 요청하는 방법을 알려 드려요.">
+  <meta name="theme-color" content="#FAFCFF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#17130F" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <style>
+    /* privacy.html의 글꼴·레이아웃·다크 모드 토큰을 공유하는 독립 안내 페이지. */
+    :root {
+      --bg: #FAFCFF;
+      --paper: #FFFFFF;
+      --paper-2: #ECE8E1;
+      --ink: #1E1A17;
+      --sub: #554D46;
+      --line: #DDD7CD;
+      --danmuji: #FFD23F;
+      --marker: rgba(255, 210, 63, 0.55);
+      --grid: rgba(30, 26, 23, 0.05);
+      --font: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #17130F;
+        --paper: #221C17;
+        --paper-2: #2E2721;
+        --ink: #F3EDE5;
+        --sub: #CBC1B6;
+        --line: #3B332C;
+        --marker: rgba(255, 210, 63, 0.3);
+        --grid: rgba(243, 237, 229, 0.045);
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #17130F; --paper: #221C17; --paper-2: #2E2721; --ink: #F3EDE5; --sub: #CBC1B6; --line: #3B332C;
+      --marker: rgba(255, 210, 63, 0.3); --grid: rgba(243, 237, 229, 0.045); color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      background-color: var(--bg);
+      background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 20px 20px; background-position: -1px -1px;
+      color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.65; letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: anywhere;
+    }
+    a { color: inherit; text-underline-offset: 3px; }
+    a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      max-width: 640px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 8px) 16px 8px;
+      background: var(--bg);
+      background: color-mix(in srgb, var(--bg) 90%, transparent);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .brand { display: flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 800; font-size: 18px; text-decoration: none; }
+    .brand img { width: 26px; height: 26px; }
+    .back {
+      display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 12px;
+      background: var(--paper); border: 1px solid var(--line); font-size: 14px; font-weight: 700; text-decoration: none;
+    }
+    main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(env(safe-area-inset-bottom) + 48px); }
+    h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; margin: 10px 0 4px; }
+    .meta { color: var(--sub); font-size: 13px; font-weight: 600; margin: 0 0 14px; }
+    h2 {
+      width: fit-content; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; margin: 30px 0 10px; padding: 0 3px;
+      background: linear-gradient(transparent 58%, var(--marker) 58%, var(--marker) 94%, transparent 94%);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) h2 { background: none; text-decoration: underline 5px var(--marker); text-underline-offset: 2px; text-decoration-skip-ink: none; }
+    }
+    :root[data-theme="dark"] h2 { background: none; text-decoration: underline 5px var(--marker); text-underline-offset: 2px; text-decoration-skip-ink: none; }
+    h3 { font-size: 15px; font-weight: 800; margin: 18px 0 6px; }
+    p { margin: 0 0 10px; }
+    ul, ol { margin: 0 0 10px; padding-left: 20px; }
+    li { margin: 4px 0; }
+    .card { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 12px; }
+    .card ul { margin: 0; }
+    .card h3:first-child { margin-top: 0; }
+    .card > :last-child { margin-bottom: 0; }
+    .note { color: var(--sub); font-size: 14px; }
+    .fill { background: var(--paper-2); border-radius: 6px; padding: 0 4px; font-weight: 700; }
+    .foot { margin-top: 32px; color: var(--sub); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./#/feed"><img src="icons/icon.svg" alt="" width="26" height="26">한입</a>
+    <a class="back" href="./#/me">앱으로 돌아가기</a>
+  </header>
+
+  <main>
+    <h1>계정 삭제</h1>
+    <p>한입에서 내 모든 기록을 지워요. <strong>되돌릴 수 없습니다.</strong></p>
+    <p class="meta">한입 · 오늘 뭐 먹었어? · 운영자 김건우</p>
+
+    <section aria-labelledby="in-app">
+      <h2 id="in-app">1. 앱 안에서 삭제하기</h2>
+      <ol>
+        <li>앱 하단의 <strong>‘나’</strong> 탭을 열어요.</li>
+        <li><strong>‘모임 설정’ → ‘위험 구역’</strong>에서 <strong>‘내 계정·기록 전부 지우기’</strong> 버튼을 눌러요.</li>
+        <li>확인 화면의 안내를 읽고 <strong>‘삭제 내용 확인했어요’</strong>를 누른 뒤, <strong>‘전부 지우고 탈퇴하기’</strong>를 눌러 최종 확인해요.</li>
+      </ol>
+      <p>삭제가 완료되면 즉시 로그아웃되고 시작 화면으로 이동해요. 이후 새 계정으로 다시 시작할 수 있어요.</p>
+      <p class="note">삭제 완료를 확인하지 못했다는 안내가 나오면 ‘다시 지우기’를 눌러 마쳐 주세요. 이미 지운 사진은 복구되지 않아요.</p>
+    </section>
+
+    <section aria-labelledby="by-email">
+      <h2 id="by-email">2. 앱을 못 쓸 때 메일로 요청</h2>
+      <p>앱에 들어갈 수 없다면 아래 내용으로 운영자에게 메일을 보내 주세요.</p>
+      <div class="card">
+        <p><strong>받는 주소:</strong> <a href="mailto:govl5088@gmail.com">govl5088@gmail.com</a></p>
+        <p><strong>제목:</strong> <span class="fill">[한입] 계정 삭제 요청</span></p>
+        <h3>본문에 적을 내용</h3>
+        <ul>
+          <li>모임 이름. 여러 개면 모두 적어 주세요.</li>
+          <li>각 모임 안에서의 내 닉네임</li>
+          <li>메일을 보낸 날짜</li>
+        </ul>
+      </div>
+      <p>본인 확인을 위해 앱 화면 캡처 등을 부탁드릴 수 있어요. 실명이나 전화번호는 묻지 않아요.</p>
+    </section>
+
+    <section aria-labelledby="data-scope">
+      <h2 id="data-scope">3. 지워지는 것 / 남는 것</h2>
+      <div class="card">
+        <h3>지워지는 것</h3>
+        <ul>
+          <li>내 기록, 사진, 글</li>
+          <li>내 댓글과 반응</li>
+          <li>내 채팅 메시지</li>
+          <li>내 계정 정보</li>
+          <li>공개 프로필과 팔로우 관계가 있다면 함께</li>
+          <li>내 초대·투표·리스트·인증 원장·설정·4자리 번호·모임 멤버십과 다른 글의 내 동행 표시</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>남는 것</h3>
+        <ul>
+          <li>다른 사람이 작성한 글과 댓글은 남아요. 다만 <strong>내가 쓴 글에 달린 다른 사람의 댓글·반응은 내 글과 함께 지워져요.</strong></li>
+          <li>다른 멤버가 남아 있는 모임 자체는 삭제되지 않아요. 내가 만든 모임이면 만든 사람 표시는 가장 먼저 가입한 멤버에게 넘어가요. 나 혼자인 모임은 지워져요.</li>
+        </ul>
+      </div>
+      <p>내 1:1 채팅방은 양쪽에서 사라져요. 삭제한 계정과 기록은 <strong>되돌릴 수 없습니다.</strong></p>
+      <p><strong>처리 기간: 앱 안에서 지우면 바로 지워져요. 메일로 요청하면 받은 날부터 10일 안에 처리하고 결과를 알려 드려요.</strong></p>
+      <p class="note">이미 열어 본 사진의 기기 사본은 브라우저 캐시에 남을 수 있어요. 브라우저 설정에서 사이트 데이터를 지우면 정리할 수 있어요. 서버 제공업체의 접속 로그·캐시·백업은 해당 업체의 보관 정책에 따라 만료돼요.</p>
+    </section>
+
+    <section aria-labelledby="more-info">
+      <h2 id="more-info">4. 추가 정보</h2>
+      <p>정보 처리와 보관에 관한 자세한 내용은 <a href="https://stkeo.github.io/hanip/privacy.html">개인정보 처리방침</a>에서 확인할 수 있어요.</p>
+      <p>체험 모드의 테스트 데이터는 이 기기의 브라우저 저장소(localStorage)에 별도로 보관해요. 체험 모드에서 ‘내 계정·기록 전부 지우기’를 완료하면 예시와 체험 중 작성한 기록이 자동으로 삭제돼요. 나중에 체험을 새로 시작하면 새 예시가 생겨요.</p>
+    </section>
+
+    <footer class="foot">
+      <p>최종 수정일: <time datetime="2026-10-18">2026년 10월 18일</time> · 시행일과 같아요.</p>
+      <p>운영자 김건우 · 문의: <a href="mailto:govl5088@gmail.com">govl5088@gmail.com</a></p>
+    </footer>
+  </main>
+</body>
+</html>

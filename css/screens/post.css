@@ -1,0 +1,215 @@
+/* 한 끼 올리기 · 기록 상세 화면
+   BLUE TABLE R05(좁은 화면 작성) · R03(공유 범위 선택창) · R01(사진 없는 비공개) · R08(올리기 상태)
+   작성 폼 = .scr-post, 공유 선택창 = .post-scope-sheet 아래로만 한정한다. */
+
+/* ---------- 입력 칸 ---------- */
+
+.scr-post .post-field { margin: 0 0 18px; min-width: 0; }
+.scr-post .post-label {
+  display: block; margin: 0 0 8px;
+  font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em;
+}
+.scr-post input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.scr-post select {
+  min-height: 52px; border-radius: 12px; background-color: var(--paper); font-size: 17px;
+}
+.scr-post select { cursor: pointer; }
+.scr-post textarea { min-height: 68px; border-radius: 14px; font-size: 16px; }
+
+.scr-post .post-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 300px) { .scr-post .post-pair { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+
+/* 가게 추천 칩: 한 줄 가로 스크롤(칩 줄만 스크롤, 화면은 넘치지 않음) */
+.scr-post .post-suggest {
+  flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-inline: contain; max-width: 100%;
+  margin: 10px 0 0; padding: 4px 1px 6px; gap: 8px; scrollbar-width: none;
+}
+.scr-post .post-suggest::-webkit-scrollbar { display: none; }
+.scr-post .post-suggest .chip { flex: none; white-space: nowrap; font-weight: 600; }
+
+/* 오류 문구: 느낌표 + 원인/다음 행동 */
+.scr-post .post-field-error {
+  display: flex; align-items: flex-start; gap: 6px; margin: 8px 0 0;
+  color: var(--danger); font-size: 14px; font-weight: 600; line-height: 1.45;
+}
+.scr-post .post-field-error .ic { flex: none; margin-top: 1px; }
+.scr-post .post-field-error .err-line { display: block; }
+
+/* ---------- 사진 ---------- */
+
+.scr-post .post-photo { margin: 0 0 18px; display: block; aspect-ratio: auto; height: auto; border-radius: 0; background: none; overflow: visible; }
+.scr-post .shot-label { margin: 0; }
+.scr-post .shot {
+  display: flex; align-items: center; gap: 12px;
+  aspect-ratio: auto; min-height: 64px; padding: 10px 14px 10px 16px;
+  border: 0; border-radius: 16px; background: var(--soft); color: var(--ink);
+}
+.scr-post .shot-ic { display: inline-flex; color: var(--blue); }
+.scr-post .shot-title { font-size: 17px; font-weight: 700; }
+.scr-post .shot-opt {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 2px;
+  color: var(--sub); font-size: 14px; font-weight: 500;
+}
+.scr-post .shot.has {
+  display: block; aspect-ratio: 16 / 10; min-height: 0; padding: 0; background: var(--soft);
+}
+.scr-post .shot.busy { opacity: 0.6; }
+.scr-post .shot .retake {
+  right: 12px; bottom: 12px; width: 48px; height: 48px; padding: 0;
+  display: grid; place-items: center; border-radius: 50%;
+  background: var(--on-blue); color: var(--blue-fill);
+  box-shadow: 0 2px 10px rgba(23, 42, 58, 0.22);
+}
+.scr-post .shot-label:focus-within .shot,
+.scr-post #photoInput:focus-visible + .post-photo .shot { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+.scr-post .ai-estimate { margin: -6px 0 18px; }
+.scr-post .ai-estimate .chip { text-align: left; }
+.scr-post .ai-estimate .sub-line { margin: 6px 0 0; font-size: 14px; }
+
+/* ---------- 어땠어요? · 별점 ---------- */
+
+.scr-post .post-ask {
+  margin: 6px 0 2px; padding-top: 22px; border-top: 1px solid var(--line);
+  font-size: 22px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.3;
+}
+.scr-post .post-ratings { margin: 0 0 16px; }
+.scr-post .rating {
+  grid-template-areas: "label val" "stars stars";
+  gap: 6px 8px; padding: 8px 0 10px; border-top: 0; border-bottom: 1px solid var(--line);
+}
+.scr-post .rating:first-of-type { margin-top: 0; }
+.scr-post .rating-label { font-size: 17px; font-weight: 700; line-height: 24px; }
+.scr-post .rating-val { font-size: 15px; font-weight: 500; color: var(--sub); line-height: 24px; white-space: nowrap; }
+.scr-post .rating-val b { font-size: 19px; font-weight: 800; color: var(--ink); line-height: 1; margin-right: 1px; }
+.scr-post .rating .post-field-error { grid-column: 1 / -1; margin: 2px 0 0; }
+.scr-post .stars { justify-content: center; gap: 8px; max-width: none; }
+.scr-post .star { flex: none; min-width: 48px; min-height: 48px; width: 48px; height: 48px; }
+.scr-post .star .ic { width: 36px; height: 36px; }
+
+/* ---------- 접힌 행(메뉴 · 가격 · 같이 먹은 친구 / 경험 인증) ---------- */
+
+.scr-post .post-more {
+  margin: 0 0 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper);
+}
+.scr-post .post-more summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  min-height: 54px; padding: 8px 12px 8px 16px; cursor: pointer; list-style: none;
+  font-size: 16px; font-weight: 600; color: var(--ink);
+}
+.scr-post .post-more summary::-webkit-details-marker { display: none; }
+.scr-post .post-more summary .ic { color: var(--ink); transition: transform 0.15s; }
+.scr-post .post-more[open] summary .ic { transform: rotate(90deg); }
+.scr-post .post-more-body { padding: 4px 16px 16px; border-top: 1px solid var(--line); }
+.scr-post .post-more .more-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 10px; margin: 12px 0 0; }
+.scr-post .post-more .more-grid .post-field { margin: 0; }
+.scr-post .post-more .post-field-error { margin: 8px 0 0; }
+.scr-post .post-with { margin-top: 16px; }
+.scr-post .post-with .chips { margin: 0; }
+.scr-post .post-with small { font-size: 14px; }
+.scr-post .post-receipt-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 6px; }
+.scr-post .post-receipt .sub-line { font-size: 14px; margin: 6px 0 0; }
+
+/* ---------- 공유 범위 행 · 주 버튼 · 상태 ---------- */
+
+.scr-post .post-share-row {
+  display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 12px;
+  width: 100%; min-height: 72px; margin: 0 0 12px; padding: 12px 12px 12px 14px;
+  border: 0; border-radius: 16px; background: var(--soft); color: var(--ink);
+  text-align: left; cursor: pointer;
+}
+.scr-post .post-share-ic { display: inline-flex; justify-content: center; color: var(--blue); }
+.scr-post .post-share-row.private .post-share-ic { color: var(--ink); }
+.scr-post .post-share-text { display: flex; flex-direction: column; min-width: 0; gap: 2px; }
+.scr-post .post-share-text b { font-size: 16px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+.scr-post .post-share-text small { font-size: 14px; color: var(--sub); font-weight: 500; }
+.scr-post .post-share-row > .ic { color: var(--ink); }
+.scr-post .post-share-row:active { background: var(--soft-2); }
+
+/* 상태 문구가 늘어나도 마지막 공유 행을 가리지 않도록 실제 고정 영역 높이를 예약한다. */
+.scr-post .post-actions-slot { min-height: var(--post-actions-height, 80px); }
+.scr-post .post-actions {
+  position: fixed; left: 50%; bottom: 0; z-index: 25; transform: translateX(-50%);
+  width: min(100%, var(--page-max)); padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  background: var(--bg);
+}
+.scr-post .post-submit { min-height: 52px; margin-top: 0; gap: 10px; }
+/* 터치의 :active가 남아 있어도 공통 비활성 버튼 색을 유지한다. */
+.scr-post .post-submit:disabled { background: var(--soft); border-color: var(--soft); }
+.scr-post .post-submit-status { margin: 0 0 8px; font-size: 14px; color: var(--sub); text-align: center; }
+/* 키보드 입력 중에는 본문 끝으로 돌아간다. 버튼으로 옮긴 초점도 유지해 누르는 도중 이동하지 않는다. */
+.scr-post.post-editing .post-actions { position: static; transform: none; width: 100%; padding-inline: 0; }
+.scr-post .post-spin {
+  width: 18px; height: 18px; flex: none; border-radius: 50%;
+  border: 2.5px solid currentColor; border-right-color: transparent;
+  animation: post-spin 0.8s linear infinite;
+}
+@keyframes post-spin { to { transform: rotate(360deg); } }
+
+.scr-post .post-submit-error {
+  display: flex; align-items: flex-start; gap: 10px; margin: 0 0 12px; padding: 14px 16px;
+  border: 1px solid var(--line-strong); border-radius: 14px; background: var(--paper);
+}
+.scr-post .post-submit-error > .ic { color: var(--danger); margin-top: 1px; }
+.scr-post .post-submit-error b { display: block; font-size: 15px; font-weight: 800; color: var(--ink); }
+.scr-post .post-submit-error p { margin: 3px 0 0; font-size: 14px; color: var(--sub); }
+
+/* ---------- 공유 선택창: 어디에 올릴까요 ---------- */
+
+.post-scope-sheet h3 { margin: 6px 48px 4px 0; font-size: 26px; font-weight: 800; letter-spacing: -0.04em; }
+.post-scope-sheet .post-scope-lead { margin: 0 0 10px; color: var(--sub); font-size: 15px; font-weight: 500; }
+.post-scope-opt {
+  position: relative; display: flex; align-items: center; gap: 14px;
+  min-height: 60px; padding: 8px 0; cursor: pointer;
+}
+.post-scope-private { border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+.post-scope-ic {
+  display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--soft); color: var(--ink);
+}
+.post-scope-opt .avatar { font-size: 18px; background: var(--soft); }
+.post-scope-name {
+  display: flex; flex-direction: column; flex: 1; min-width: 0;
+  font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1.4; overflow-wrap: anywhere;
+}
+.post-scope-name small { font-size: 14px; font-weight: 500; color: var(--sub); }
+.post-check {
+  display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: 7px;
+  border: 2px solid var(--line-strong); background: var(--paper); color: transparent;
+}
+.post-scope-opt input:checked + .post-check { background: var(--blue-fill); border-color: var(--blue-fill); color: var(--on-blue); }
+.post-scope-opt input:focus-visible + .post-check { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+.post-scope-groups { padding: 6px 0 8px; border-bottom: 1px solid var(--line); }
+.post-scope-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin: 12px 0 2px; }
+.post-scope-head b { font-size: 16px; font-weight: 700; }
+.post-scope-count { font-size: 14px; color: var(--sub); font-variant-numeric: tabular-nums; }
+
+.post-scope-public { margin: 10px -10px 0; padding: 8px 10px; border-radius: 14px; }
+.post-scope-public.on { background: var(--soft); }
+.post-scope-public.on .post-scope-ic { background: var(--paper); }
+
+.post-scope-with { margin: 12px 0 0; padding: 14px 16px; border-radius: 14px; background: var(--soft); }
+.post-scope-with b { display: block; font-size: 15px; font-weight: 700; color: var(--blue); }
+.post-scope-with p { margin: 4px 0 2px; font-size: 15px; font-weight: 700; color: var(--ink); }
+.post-scope-with small { display: block; font-size: 14px; color: var(--sub); }
+
+.post-scope-summary { margin: 14px 0 12px; }
+.post-scope-summary.line {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 15px; font-weight: 600; color: var(--ink);
+}
+.post-scope-summary.line .ic { color: var(--sub); }
+.post-scope-summary.card-like {
+  display: flex; align-items: center; gap: 14px; padding: 18px 16px; border-radius: 16px; background: var(--soft);
+}
+.post-scope-summary-ic { display: inline-flex; gap: 6px; color: var(--ink); flex: none; }
+.post-scope-summary.card-like b { display: block; font-size: 17px; font-weight: 800; color: var(--ink); }
+.post-scope-summary.card-like small { display: block; font-size: 14px; color: var(--sub); }
+
+/* 선택 상자: 기본 삼각형 대신 외곽선 꺾쇠 */
+.scr-post .post-pair .post-field { position: relative; }
+.scr-post .post-pair select { background-image: none; padding-right: 40px; }
+.scr-post .post-select-chev {
+  position: absolute; right: 14px; bottom: 16px; display: inline-flex; pointer-events: none; color: var(--ink);
+}

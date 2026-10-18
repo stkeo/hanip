@@ -1,0 +1,276 @@
+/* 채팅 목록 · 대화 · 초대 화면 — BLUE TABLE
+   정본: R06 받은 초대(응답 전·패스 후), R09 오른쪽 1:1 대화. 색은 app.css 토큰만 쓴다.
+   범위: .scr-chats(목록) · .scr-thread(대화) · .scr-invites(초대 모아보기) · .bt-invite(초대 카드)
+         · .poll-card(투표 카드, 피드·맛집에서도 호출) · 시트(.invite-sheet .invite-place-sheet .poll-sheet .thread-info .new-convo) */
+
+/* ================= 채팅 목록 ================= */
+
+.scr-chats .chats-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 0 14px; }
+.scr-chats .chats-title .page-title { margin: 0; font-size: 30px; }
+.scr-chats .chats-new { flex: none; gap: 4px; min-height: 44px; padding: 6px 14px 6px 10px; border-radius: 999px; }
+.scr-chats .group-pill { margin-bottom: 6px; }
+.scr-chats .group-pill-name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; }
+.scr-chats .thread-list { display: flex; flex-direction: column; }
+.scr-chats .thread-row {
+  display: grid; grid-template-columns: 52px minmax(0, 1fr) 88px; gap: 12px; align-items: center;
+  min-height: 96px; padding: 12px 0; border-bottom: 1px solid var(--line);
+  color: var(--ink); text-decoration: none;
+}
+.scr-chats .thread-row:last-child { border-bottom: 0; }
+.scr-chats .thread-avatar { width: 52px; height: 52px; font-size: 20px; }
+.scr-chats .group-face, .scr-thread .group-face { background: var(--blue-fill); color: var(--on-blue); }
+.scr-chats .thread-body { min-width: 0; }
+.scr-chats .thread-name { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 6px; min-width: 0; }
+.scr-chats .thread-name:not(:has(.thread-members)) { grid-template-columns: minmax(0, 1fr); }
+.scr-chats .thread-name b {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  min-width: 0; font-size: 17px; font-weight: 700; line-height: 1.4;
+  overflow: hidden; white-space: normal;
+}
+.scr-chats .thread-members { color: var(--faint); font-size: 14px; font-weight: 500; white-space: nowrap; }
+.scr-chats .chat-count { font-size: 14px; }
+.scr-chats .thread-group {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+  margin-top: 4px; color: var(--faint); font-size: 14px; font-weight: 500; line-height: 1.4;
+}
+.scr-chats .thread-body p {
+  margin: 3px 0 0; color: var(--sub); font-size: 15px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.scr-chats .thread-row.unread .thread-body p { color: var(--ink); }
+.scr-chats .thread-meta { align-self: start; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; width: 88px; padding-top: 4px; }
+.scr-chats .thread-meta > * { flex: none; }
+.scr-chats .thread-meta time { font-size: 13px; color: var(--faint); white-space: nowrap; max-width: none; font-variant-numeric: tabular-nums; }
+.scr-chats .empty { padding: 40px 0; text-align: center; color: var(--sub); }
+
+/* ================= 대화 ================= */
+
+body[data-screen="t"] { background: var(--soft); padding-bottom: 0; }
+body[data-screen="t"] main { padding-bottom: 0; }
+.scr-thread .screen-header {
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  margin-bottom: 0; min-height: calc(64px + env(safe-area-inset-top));
+  background: var(--bg); border-bottom: 1px solid var(--line);
+}
+.scr-thread .screen-header-title {
+  display: flex; align-items: center; justify-content: center; gap: 10px; min-width: 0;
+  font-size: 18px; font-weight: 800;
+}
+.scr-thread .screen-header-title > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.scr-thread .thread-head-avatar { width: 40px; height: 40px; font-size: 17px; }
+.scr-thread .screen-header .icon-btn { width: 44px; height: 44px; flex: none; }
+.scr-thread .screen-header-right .icon-btn { color: var(--ink); }
+
+.scr-thread .chat-page {
+  display: flex; flex-direction: column; min-height: 360px;
+  height: calc(100dvh - 65px - env(safe-area-inset-top));
+}
+.scr-thread .chat-messages { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 0 12px; }
+.scr-thread .chat-date { display: block; margin: 16px 0 10px; text-align: center; font-size: 14px; color: var(--sub); }
+.scr-thread .chat-date::before, .scr-thread .chat-date::after { content: none; }
+.scr-thread .chat-system { margin: 12px 0; text-align: center; font-size: 14px; color: var(--sub); }
+
+.scr-thread .chat-line { display: flex; flex-direction: column; align-items: flex-start; margin: 4px 0; }
+.scr-thread .chat-line.first { margin-top: 14px; }
+.scr-thread .chat-line.theirs { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0; }
+.scr-thread .chat-avatar { width: 36px; height: 36px; flex: none; font-size: 15px; }
+.scr-thread .chat-author {
+  grid-column: 1 / -1; justify-self: start; display: flex; align-items: center; gap: 8px;
+  min-width: 44px; min-height: 44px; max-width: 100%; margin: 0; padding: 4px 0;
+  font-size: 14px; font-weight: 600; color: var(--sub); text-decoration: none;
+}
+.scr-thread .chat-author-name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.scr-thread .chat-stack { grid-column: 2; display: flex; flex-direction: column; align-items: flex-start; min-width: 0; max-width: 100%; }
+.scr-thread .chat-line.direct .chat-author { grid-column: 1; grid-row: 1; }
+.scr-thread .chat-line.direct .chat-stack { grid-row: 1; }
+.scr-thread .chat-bubble,
+.scr-thread .chat-line .reply-bubble {
+  max-width: 100%; padding: 10px 16px; border: 0; border-radius: 18px;
+  background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.5;
+  box-shadow: 0 1px 2px rgba(23, 42, 58, 0.05);
+}
+.scr-thread .chat-bubble p { margin: 0; white-space: pre-wrap; }
+.scr-thread .chat-line.mine { align-items: flex-end; }
+.scr-thread .chat-line.mine .chat-bubble { max-width: 78%; background: var(--blue-fill); color: var(--on-blue); box-shadow: none; }
+.scr-thread .chat-line time { flex: none; margin: 4px 6px 0; font-size: 13px; color: var(--faint); white-space: nowrap; }
+.scr-thread .chat-line.card-line { align-items: stretch; margin: 14px 0 8px; }
+.scr-thread .chat-line.card-line > article { width: 100%; max-width: none; margin: 0; }
+.scr-thread .chat-private { margin: 14px 0 4px; text-align: center; font-size: 14px; color: var(--sub); }
+
+.scr-thread .chat-compose {
+  flex: none; margin: 0 calc(-1 * var(--gutter));
+  padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+  background: var(--bg); border-top: 1px solid var(--line);
+}
+.scr-thread .chat-quick { margin: 0 0 10px; }
+.scr-thread .chat-status { margin: 0 0 8px; color: var(--danger); font-size: 14px; }
+.scr-thread .chat-form { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.scr-thread .chat-round {
+  flex: none; display: grid; place-items: center; width: 48px; height: 48px; padding: 0;
+  border: 0; border-radius: 50%; background: var(--blue-fill); color: var(--on-blue); cursor: pointer;
+}
+.scr-thread .chat-round:active { background: var(--blue-press); }
+.scr-thread .chat-round:disabled { background: var(--soft-2); color: var(--faint); cursor: default; }
+#view .scr-thread .chat-input {
+  flex: 1; width: 0; min-width: 0; min-height: 48px; margin: 0; padding: 10px 18px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--paper);
+}
+
+/* ================= 같이 가자 카드 ================= */
+
+.bt-invite {
+  padding: 10px 10px 14px; border: 1px solid var(--line); border-radius: 20px;
+  background: var(--paper); box-shadow: var(--shadow); color: var(--ink);
+}
+.inv-photo { position: relative; overflow: hidden; aspect-ratio: 16 / 9.4; margin-bottom: 12px; border-radius: 14px; background: var(--soft); }
+.inv-photo .inv-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.inv-tag {
+  position: absolute; left: 10px; top: 10px; padding: 4px 12px; border-radius: 999px;
+  background: var(--blue-fill); color: var(--on-blue); font-size: 14px; font-weight: 700; line-height: 1.4;
+}
+.bt-invite .inv-title { margin: 0 6px 2px; font-size: 22px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.3; }
+.bt-invite .inv-area { display: flex; align-items: center; gap: 4px; margin: 0 6px 8px; color: var(--sub); font-size: 14px; }
+.bt-invite .inv-msg { margin: 0 6px 8px; color: var(--sub); font-size: 15px; }
+.bt-invite .inv-when { display: flex; align-items: center; gap: 10px; margin: 6px 6px 14px; font-size: 16px; font-weight: 600; }
+.bt-invite .inv-when .ic { color: var(--sub); }
+.bt-invite .inv-choices { margin: -4px 6px 14px; }
+.bt-invite .inv-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0 4px; }
+.bt-invite .inv-actions .btn { min-height: 52px; padding-inline: 8px; font-size: 16px; }
+.bt-invite .inv-actions .btn:not(.primary) { border-color: var(--line-strong); }
+.bt-invite .inv-other { display: flex; min-height: 44px; margin: 6px auto 0; font-size: 16px; font-weight: 700; }
+.bt-invite .inv-note { display: flex; align-items: center; gap: 8px; margin: 4px 4px 0; }
+.bt-invite .inv-note .sheet-input { flex: 1; min-width: 0; margin: 0; }
+.bt-invite .inv-note .btn { flex: none; min-height: 44px; }
+/* 상태: 읽기 전용 문장 칸(누르는 모양 없음). 패스도 빨강·경고 없이 같은 옅은 블루 */
+.bt-invite .inv-state {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; margin: 0 4px; padding: 10px 14px; border-radius: 14px;
+  background: var(--soft); color: var(--ink); font-size: 16px; font-weight: 800; text-align: center;
+}
+.bt-invite .inv-state .ic { flex: none; }
+.bt-invite.is-yes .inv-state .ic { color: var(--blue); }
+.bt-invite .inv-reply { margin: 8px 6px 0; color: var(--sub); font-size: 15px; }
+.bt-invite > .btn.wide { width: calc(100% - 8px); margin: 10px 4px 0; }
+.bt-invite .inv-state + .inv-actions { margin-top: 10px; }
+
+/* 초대 모아보기 */
+.scr-invites .inv-section { margin: 20px 0 10px; font-size: 19px; font-weight: 800; }
+.scr-invites .inv-section:first-child { margin-top: 4px; }
+.scr-invites .inv-rows { display: flex; flex-direction: column; gap: 10px; }
+.bt-invite-row {
+  display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 14px; align-items: center;
+  padding: 10px 12px 10px 10px; border: 1px solid var(--line); border-radius: 18px;
+  background: var(--paper); box-shadow: var(--shadow); color: var(--ink); text-decoration: none;
+}
+.bt-invite-row .inv-photo.thumb { width: 72px; height: 72px; aspect-ratio: auto; margin: 0; border-radius: 12px; }
+.bt-invite-row > .ic { color: var(--faint); }
+.inv-row-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.inv-row-body b { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; font-size: 17px; font-weight: 800; overflow: hidden; }
+.inv-row-body small { color: var(--sub); font-size: 14px; }
+.inv-row-state { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; color: var(--blue); }
+.inv-row-state.is-pass, .inv-row-state.is-cancelled { color: var(--sub); }
+.scr-invites .inv-private { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 24px 0 0; color: var(--sub); font-size: 14px; }
+
+/* ================= 투표 카드 ================= */
+
+.poll-card { padding: 16px; border-radius: 20px; }
+.poll-card .poll-head { display: grid; justify-items: start; gap: 4px; margin-bottom: 12px; }
+.poll-card .poll-kicker { padding: 3px 10px; border-radius: 999px; background: var(--soft); color: var(--blue); font-size: 14px; font-weight: 700; }
+.poll-card .poll-head h3 { margin: 2px 0 0; font-size: 18px; font-weight: 800; letter-spacing: -0.03em; }
+.poll-card .poll-end { display: inline-flex; align-items: center; gap: 4px; color: var(--sub); font-size: 14px; }
+.poll-card .poll-options { gap: 8px; }
+.poll-card .poll-option {
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto 24px; align-items: center; gap: 10px;
+  width: 100%; min-height: 64px; padding: 12px 14px 20px; border: 1px solid var(--line); border-radius: 14px;
+  background: var(--paper) linear-gradient(var(--soft-2), var(--soft-2)) 14px calc(100% - 9px) / calc(100% - 28px) 4px no-repeat;
+  color: var(--ink); text-align: left; cursor: pointer;
+}
+.poll-card .poll-option.on { border: 2px solid var(--blue); padding: 11px 13px 19px; }
+.poll-card .poll-option.winner { border: 2px solid var(--blue); padding: 11px 13px 19px; background-color: var(--soft); }
+.poll-card .poll-fill { left: 14px; bottom: 9px; height: 4px; border-radius: 2px; background: var(--blue-fill); }
+.poll-card .poll-option.on .poll-fill, .poll-card .poll-option.winner .poll-fill { left: 13px; bottom: 8px; }
+.poll-card .poll-option-body b { font-size: 16px; font-weight: 700; }
+.poll-card .poll-option-body { min-width: 0; }
+.poll-card .poll-option-body small { font-size: 14px; }
+.poll-card .poll-voters .avatar { font-size: 14px; }
+.poll-card .poll-option-body small:empty { display: none; }
+.poll-card .poll-count { position: relative; display: inline-flex; align-items: baseline; gap: 2px; font-size: 13px; color: var(--sub); white-space: nowrap; }
+.poll-card .poll-count b { font-size: 17px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+.poll-card .poll-check {
+  position: relative; display: grid; place-items: center; width: 24px; height: 24px;
+  border: 1.5px solid var(--line-strong); border-radius: 50%; color: var(--on-blue);
+}
+.poll-card .poll-option.on .poll-check { border-color: var(--blue-fill); background: var(--blue-fill); }
+.poll-card .poll-option:disabled:not(.on) .poll-check { visibility: hidden; }
+.poll-card .poll-foot { align-items: center; flex-wrap: wrap; margin: 12px 0 0; color: var(--sub); }
+.poll-card .poll-foot > small:first-child { flex: none; white-space: nowrap; font-size: 14px; }
+.poll-card .poll-by { display: flex; align-items: center; flex-wrap: wrap; gap: 0 4px; font-size: 14px; }
+.poll-card .poll-foot .nick-link { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; font-size: 14px; color: var(--sub); }
+.poll-card > .btn.small { margin-top: 10px; min-height: 44px; }
+.poll-card .poll-winner { margin-top: 4px; }
+
+/* ================= 시트 ================= */
+
+/* 같이 가자 보내기 */
+.invite-sheet .sheet-place {
+  grid-template-columns: 64px minmax(0, 1fr); padding: 10px; margin: 0 0 6px;
+  border-radius: 16px; background: var(--soft);
+}
+.invite-sheet .sheet-place .sheet-thumb { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
+.invite-sheet .sheet-place b { font-size: 18px; }
+.invite-sheet .sheet-place small { display: flex; align-items: center; gap: 4px; }
+.invite-sheet .row-label { margin-top: 18px; color: var(--ink); font-size: 15px; font-weight: 800; }
+.invite-sheet .slot-head b { color: var(--ink); }
+.invite-sheet .slot-head.weekend b { color: var(--blue); }
+.invite-sheet .slot { border-color: var(--line-strong); background: var(--paper); }
+.invite-sheet .slot.on { border-color: var(--blue-fill); background: var(--blue-fill); color: var(--on-blue); }
+.invite-sheet .slot:disabled { border-color: transparent; background: var(--line); opacity: 0.7; }
+.invite-sheet .slot-tag { padding: 4px 10px; }
+.invite-sheet .invite-preview { margin: 18px 0 14px; }
+.invite-sheet .preview-card { gap: 4px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--soft); }
+.invite-sheet .preview-tag {
+  align-self: flex-start; padding: 2px 10px; border-radius: 999px;
+  background: var(--blue-fill); color: var(--on-blue); font-size: 13px; font-weight: 700;
+}
+.invite-sheet .preview-place { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; font-size: 18px; }
+.invite-sheet .preview-place small { display: inline-flex; align-items: center; gap: 2px; }
+.invite-sheet .preview-when { display: flex; align-items: center; gap: 6px; }
+.invite-sheet .sheet-foot { gap: 6px; }
+
+/* 같이 갈 가게 고르기 */
+.invite-place-sheet .hint { text-align: left; margin: 0 0 6px; }
+.invite-place-sheet .place-picks { display: flex; flex-direction: column; max-height: 42vh; overflow-y: auto; margin-bottom: 8px; }
+.invite-place-sheet .place-pick {
+  display: grid; grid-template-columns: 52px minmax(0, 1fr) 20px; gap: 12px; align-items: center;
+  width: 100%; min-height: 66px; padding: 7px 2px; border: 0; border-bottom: 1px solid var(--line);
+  background: transparent; color: var(--ink); text-align: left; cursor: pointer;
+}
+.invite-place-sheet .place-pick:last-child { border-bottom: 0; }
+.invite-place-sheet .place-pick-img { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; }
+.invite-place-sheet .place-pick-body { display: flex; flex-direction: column; min-width: 0; }
+.invite-place-sheet .place-pick-body b { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; font-size: 16px; font-weight: 700; overflow: hidden; }
+.invite-place-sheet .place-pick-body small { display: inline-flex; align-items: center; gap: 2px; color: var(--sub); font-size: 14px; }
+.invite-place-sheet .place-pick > .ic { color: var(--faint); }
+.invite-place-sheet .place-direct { margin-top: 10px; }
+.invite-place-sheet .place-direct .sheet-input { margin: 0 0 10px; }
+
+/* 투표 만들기 */
+.poll-sheet .row-label { color: var(--ink); font-size: 15px; font-weight: 800; }
+.poll-sheet .poll-chosen .chip { gap: 4px; }
+.poll-sheet .poll-add { gap: 4px; min-height: 44px; margin: 0 0 8px; }
+.poll-sheet .place-row .sheet-input { margin: 4px 0 8px; }
+
+/* 대화 정보(i) · 새 대화 */
+.thread-info .sub-line { margin: -4px 0 8px; }
+.thread-info .member-list { margin-bottom: 8px; }
+.thread-info .member-list .avatar { width: 36px; height: 36px; font-size: 15px; }
+.thread-info .member-list li { padding: 0; }
+.thread-info .member-list .nick-link { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 6px 0; font-weight: 700; text-decoration: none; color: var(--ink); }
+.thread-info .btn.wide { margin-top: 10px; }
+.thread-info .link-btn { display: block; margin: 8px auto 0; color: var(--sub); }
+.new-convo section + section { margin-top: 16px; }
+.new-convo h4 { margin: 0 0 10px; font-size: 15px; font-weight: 800; color: var(--sub); }
+
+.scr-thread .message-tools { display: flex; align-items: center; gap: 4px; }
+.scr-thread .message-tools time { margin: 0 6px; }

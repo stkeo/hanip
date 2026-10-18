@@ -1,0 +1,315 @@
+/* 내 식탁 · 개인 기록 · 가고 싶은 곳 · 모임 멤버/프로필 · 설정 (BLUE TABLE 03 · R14 · R15 · R01)
+   선택자는 화면 루트(.scr-me, .scr-records, .scr-members, .scr-profile, body[data-screen="settings"])
+   또는 이 담당이 그리는 부품(.bowls-section, .challenges-section) 아래로 한정한다. */
+
+/* ================= 공통: 프로필 줄 · 통계 줄 · 연속 기록 ================= */
+
+:is(.scr-me, .scr-profile) .me-profile {
+  display: flex; align-items: center; gap: 16px; margin: 0 0 18px;
+}
+:is(.scr-me, .scr-profile) .me-profile > .avatar { font-size: 26px; background: var(--soft); box-shadow: inset 0 0 0 2px var(--soft-2); }
+:is(.scr-me, .scr-profile) .me-profile-body { flex: 1; min-width: 0; }
+:is(.scr-me, .scr-profile) .me-name-row { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; }
+:is(.scr-me, .scr-profile) .me-name {
+  margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.3; color: var(--ink);
+}
+:is(.scr-me, .scr-profile, .scr-members) .me-title-chip {
+  display: inline-flex; align-items: center; padding: 3px 12px; border-radius: 999px;
+  background: var(--soft); color: var(--blue); font-size: 14px; font-weight: 700; line-height: 1.4; max-width: 100%;
+}
+:is(.scr-me, .scr-profile) .profile-bio { display: flex; align-items: center; flex-wrap: wrap; gap: 0 6px; }
+:is(.scr-me, .scr-profile) .profile-bio > p { margin: 4px 0 0; font-size: 15px; color: var(--sub); min-width: 0; }
+:is(.scr-me, .scr-profile) .profile-bio > p.bio-empty { color: var(--faint); }
+:is(.scr-me, .scr-profile) .profile-bio .bio-edit {
+  min-height: 44px; padding: 0 6px; margin: 0 0 -8px -6px; font-size: 14px; font-weight: 700;
+}
+:is(.scr-me, .scr-profile) .profile-bio .bio-edit::after { display: none; }
+:is(.scr-me, .scr-profile) .profile-bio form { flex-basis: 100%; }
+:is(.scr-me, .scr-profile) .me-bio-empty { margin: 4px 0 0; font-size: 15px; color: var(--sub); }
+
+:is(.scr-me, .scr-profile) .me-stats {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; margin: 0 0 6px; padding: 4px 0;
+  font-variant-numeric: tabular-nums;
+}
+:is(.scr-me, .scr-profile) .me-stat {
+  display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap; gap: 4px 6px; min-width: 0; padding: 2px 6px;
+}
+:is(.scr-me, .scr-profile) .me-stat + .me-stat { border-left: 1px solid var(--line-strong); }
+:is(.scr-me, .scr-profile) .me-stat span { font-size: 14px; font-weight: 500; color: var(--sub); white-space: nowrap; }
+:is(.scr-me, .scr-profile) .me-stat b { font-size: 20px; font-weight: 800; color: var(--blue); line-height: 1.2; }
+
+:is(.scr-me, .scr-records, .scr-profile) .rec-streak {
+  display: flex; align-items: center; gap: 10px; min-height: 44px; margin: 6px 0 10px; padding: 0 4px;
+  font-size: 17px; color: var(--ink);
+}
+:is(.scr-me, .scr-records, .scr-profile) .rec-streak .ic { color: var(--blue); }
+:is(.scr-me, .scr-records, .scr-profile) .rec-streak b { font-weight: 800; letter-spacing: -0.02em; }
+:is(.scr-me, .scr-records, .scr-profile) .rec-streak.zero { font-size: 15px; color: var(--sub); }
+:is(.scr-me, .scr-records, .scr-profile) .rec-streak.zero .ic { color: var(--faint); }
+
+:is(.scr-me, .scr-records, .scr-profile) .rec-list-title {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin: 24px 0 12px; font-size: 20px; font-weight: 800; letter-spacing: -0.03em;
+}
+:is(.scr-me, .scr-records, .scr-profile) .rec-list-title small {
+  flex: none; font-size: 15px; font-weight: 500; color: var(--sub); letter-spacing: 0; font-variant-numeric: tabular-nums;
+}
+
+:is(.scr-me, .scr-records) .rec-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 28px 16px; border-radius: 18px; background: var(--soft); text-align: center;
+}
+:is(.scr-me, .scr-records) .rec-empty p { margin: 0; color: var(--sub); font-size: 15px; font-weight: 600; }
+
+/* ================= 내 식탁 (#/me) ================= */
+
+.me-gear { color: var(--ink); }
+.scr-me .me-title { margin: 2px 0 18px; font-size: 32px; font-weight: 800; letter-spacing: -0.04em; }
+
+.scr-me .me-recent { margin: 14px 0 8px; }
+.scr-me .me-section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 10px; }
+.scr-me .me-section-head h2 { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -0.03em; }
+.scr-me .me-more {
+  display: inline-flex; align-items: center; gap: 2px; min-height: 44px; padding: 0 2px;
+  color: var(--blue); font-size: 14px; font-weight: 700; text-decoration: none;
+}
+.scr-me .me-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
+.scr-me .me-tile { display: grid; grid-template-rows: auto 1fr auto; min-width: 0; }
+.scr-me .me-tile-photo {
+  display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover;
+  border-radius: 12px; background: var(--soft);
+}
+.scr-me .me-tile b {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  margin: 8px 0 0; font-size: 16px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.4;
+  overflow: hidden; align-self: start;
+}
+.scr-me .me-tile small { display: block; color: var(--sub); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.scr-me .me-menu {
+  margin: 22px 0 14px; padding: 2px 16px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow);
+}
+.scr-me .me-menu-row { min-height: 54px; font-size: 16px; font-weight: 600; }
+
+.scr-me .public-profile-card .btn.wide { justify-content: space-between; }
+
+.scr-me .me-progress { margin: 12px 0; border-radius: 18px; background: var(--soft); }
+.scr-me .me-progress > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 76px; padding: 14px 16px; cursor: pointer; list-style: none;
+}
+.scr-me .me-progress > summary::-webkit-details-marker { display: none; }
+.scr-me .me-progress > summary h2 { margin: 0; font-size: 18px; line-height: 1.4; }
+.scr-me .me-progress-copy { min-width: 0; }
+.scr-me .me-progress-note { display: block; margin-top: 4px; color: var(--sub); font-size: 14px; }
+.scr-me .me-progress > summary > .ic { flex: none; color: var(--blue); }
+.scr-me .me-progress[open] > summary > .ic { transform: rotate(90deg); }
+.scr-me .me-progress > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 18px; }
+.scr-me .me-progress > .card { margin: 0; padding-top: 0; }
+
+/* ================= 그릇 수 · 도전 (내 식탁·가게·네임드·피드에서 공용) ================= */
+
+.bowls-section.card, .challenges-section.card {
+  background: var(--soft); border-color: transparent; box-shadow: none; padding: 16px 16px 8px;
+}
+.bowls-section h2, .challenges-section h2 { display: flex; align-items: center; gap: 8px; font-size: 18px; margin: 0 0 6px; }
+.challenges-section h2::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--lemon); flex: none;
+}
+.bowls-section > .sub-line { margin: 0 0 6px; }
+.bowls-section .bowl-row, .challenges-section .challenge-row {
+  display: grid; gap: 6px; padding: 6px 0; border-top: 1px solid var(--soft-2); line-height: 1.4;
+}
+:is(.bowls-section, .challenges-section) .count-head { gap: 6px 8px; }
+:is(.bowls-section, .challenges-section) :is(.bowl-row, .challenge-row) > p { margin: 0; font-size: 14px; }
+:is(.bowls-section, .challenges-section) :is(.bowl-row, .challenge-row) > small { font-size: 14px; }
+.bowls-section .count-head b, .challenges-section .count-head b { font-size: 16px; font-weight: 800; }
+.bowls-section .count-head .badge, .challenges-section .count-head .badge {
+  background: var(--paper); color: var(--blue); padding: 2px 10px; font-size: 14px;
+}
+.challenges-section .count-head small { color: var(--blue); font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; flex: none; }
+.bowls-section .count-progress, .challenges-section .count-progress,
+.challenge-mini .count-progress { height: 5px; margin: 8px 0 6px; background: var(--paper); }
+.bowls-section .count-progress, .challenges-section .count-progress { margin: 0; }
+:is(.bowls-section, .challenges-section, .challenge-mini) .count-progress::-webkit-progress-bar { background: var(--paper); }
+
+/* ================= 내 기록 (#/records) ================= */
+
+.scr-records .rec-head { margin: 0 0 12px; }
+.scr-records .rec-head-row { display: flex; align-items: center; gap: 2px; }
+.scr-records .rec-back { margin-left: -12px; color: var(--ink); flex: none; }
+.scr-records .rec-head .page-title { margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.04em; }
+.scr-records .rec-head .sub-line { margin: 6px 0 0; font-size: 15px; }
+
+.scr-records .rec-summary {
+  padding: 12px 16px; border-radius: 16px;
+  background: var(--paper); border: 1.5px solid var(--soft-2);
+}
+.scr-records .rec-summary-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 2px 10px; }
+.scr-records .rec-summary-head b { font-size: 16px; font-weight: 800; }
+.scr-records .rec-summary-head small { color: var(--blue); font-size: 14px; font-weight: 500; line-height: 1.4; }
+.scr-records .rec-summary-nums {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 10px;
+  text-align: center; font-variant-numeric: tabular-nums;
+}
+.scr-records .rec-summary-nums > div { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; }
+.scr-records .rec-summary-nums > div + div { border-left: 1px solid var(--line); }
+.scr-records .rec-summary-nums span { font-size: 14px; color: var(--sub); font-weight: 500; }
+.scr-records .rec-summary-nums b { font-size: 28px; font-weight: 800; color: var(--blue); line-height: 1.15; }
+
+.scr-records .rec-streak { margin: 12px 0; }
+.scr-records .rec-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.scr-records .rec-filter {
+  min-height: 44px; padding: 8px 10px; border-radius: 10px;
+  border: 1.5px solid var(--blue); background: var(--paper); color: var(--blue);
+  font-size: 15px; font-weight: 700; cursor: pointer;
+}
+.scr-records .rec-filter.on { background: var(--blue-fill); border-color: var(--blue-fill); color: var(--on-blue); font-weight: 800; }
+.scr-records .rec-filter:active { transform: scale(0.98); }
+.scr-records.want-view .rec-filters { margin-top: 0; }
+
+/* 기록 카드(R15) */
+.scr-records .record-card {
+  margin: 0 0 14px; padding: 12px 16px 14px; border-radius: 18px;
+  background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow);
+}
+.scr-records .rec-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  min-height: 44px; margin: 0 0 8px; font-size: 14px; color: var(--sub);
+}
+.scr-records .rec-delete {
+  display: inline-flex; align-items: center; gap: 4px; min-width: 44px; min-height: 44px; flex: none; margin: 0 -8px 0 0; padding: 0 8px;
+  border: 0; border-radius: 10px; background: transparent; color: var(--sub); font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.scr-records .rec-delete:active { background: var(--soft); }
+.scr-records .rec-photo {
+  display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover;
+  border-radius: 14px; background: var(--soft); margin: 0 0 12px;
+}
+.scr-records .rec-main { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; align-items: center; margin: 2px 0 8px; }
+.scr-records .rec-place { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.3; }
+.scr-records .rec-sub { margin: 2px 0 0; font-size: 14px; color: var(--sub); }
+.scr-records .rec-info .post-menu { margin: 4px 0 0; font-size: 14px; color: var(--sub); }
+.scr-records .rec-info .post-verified { margin: 4px 0 0; font-size: 14px; }
+.scr-records .record-card .scores { margin: 14px 0 12px; }
+.scr-records .record-card .score i { font-size: 14px; }
+.scr-records .rec-note {
+  margin: 0; padding: 12px 14px; border-radius: 12px; background: var(--soft);
+  font-size: 15px; color: var(--ink); white-space: pre-wrap;
+}
+.scr-records .rec-scope { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 15px; color: var(--sub); }
+.scr-records .rec-scope .ic { color: var(--sub); }
+
+/* 가고 싶은 곳(R14 오른쪽) */
+.scr-records .want-card { margin: 0 0 8px; }
+.scr-records .want-photo {
+  display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover;
+  border-radius: 14px; background: var(--soft);
+}
+.scr-records .want-place { margin: 12px 0 2px; font-size: 20px; font-weight: 800; letter-spacing: -0.03em; }
+.scr-records .want-place .area { font-size: 14px; }
+.scr-records .want-meta { margin: 0 0 12px; font-size: 14px; color: var(--sub); }
+.scr-records .want-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.scr-records .want-actions .btn { min-height: 48px; padding-inline: 10px; font-size: 16px; }
+.scr-records .want-remove { display: flex; justify-content: flex-end; }
+.scr-records .want-remove-btn {
+  min-height: 44px; min-width: 44px; padding: 0 2px; border: 0; background: transparent;
+  color: var(--blue); font-size: 15px; font-weight: 700; cursor: pointer;
+}
+.scr-records .want-help { margin: 0 0 8px; font-size: 14px; color: var(--sub); }
+.scr-records .done-title { padding-top: 22px; border-top: 1px solid var(--soft-2); }
+.scr-records .want-done-list { list-style: none; margin: 0; padding: 0; }
+.scr-records .want-done { display: flex; align-items: center; gap: 14px; min-height: 60px; padding: 6px 0; }
+.scr-records .want-done .ic { color: var(--blue); }
+.scr-records .want-done b { display: block; font-size: 17px; font-weight: 800; }
+.scr-records .want-done small { color: var(--sub); font-size: 14px; }
+
+/* ================= 모임 멤버 (#/members) ================= */
+
+.scr-members .members-sub { margin: -4px 0 14px; font-size: 15px; color: var(--sub); font-weight: 500; }
+.scr-members .member-rows { padding: 2px 16px; }
+.scr-members .member-row {
+  display: flex; align-items: center; gap: 14px; min-height: 76px; padding: 12px 0;
+  border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink);
+}
+.scr-members .member-row:last-child { border-bottom: 0; }
+.scr-members .member-row > .avatar { font-size: 20px; }
+.scr-members .member-row > .ic { color: var(--faint); }
+.scr-members .member-row-body { flex: 1; min-width: 0; }
+.scr-members .member-row-name { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; }
+.scr-members .member-row-name b { font-size: 17px; font-weight: 800; }
+.scr-members .member-me { font-size: 14px; font-weight: 700; color: var(--sub); }
+.scr-members .member-row-body p { margin: 2px 0 0; font-size: 14px; color: var(--sub); }
+
+/* ================= 멤버 프로필 (#/u) ================= */
+
+.scr-profile .me-profile { margin-top: 4px; }
+.scr-profile .me-name { font-size: 24px; }
+.scr-profile .title-badges { justify-content: flex-start; margin: 0 0 16px; }
+.scr-profile .title-badge { align-items: flex-start; margin: 0; }
+.scr-profile .title-badge, .scr-profile .title-badge small { font-size: 14px; }
+.scr-profile .profile-places { padding: 2px 16px; }
+.scr-profile .profile-place {
+  grid-template-columns: 64px minmax(0, 1fr) auto; padding: 12px 0; border-bottom: 1px solid var(--line); color: var(--ink);
+}
+.scr-profile .profile-place:last-child { border-bottom: 0; }
+.scr-profile .profile-place > .ic { color: var(--faint); }
+.scr-profile .profile-place small { display: block; color: var(--blue); font-weight: 700; }
+.scr-profile .profile-place :is(small, span) { font-size: 14px; }
+.scr-profile .profile-block .hint { text-align: left; }
+.scr-profile .post-card .nick-link {
+  display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; max-width: 100%;
+}
+.scr-profile .post-card a.post-place { min-height: 44px; padding-block: 10px; }
+
+/* ================= 설정 (#/settings) ================= */
+
+body[data-screen="settings"] .set-group { margin: 0 0 8px; }
+body[data-screen="settings"] .set-eyebrow { display: block; font-size: 14px; font-weight: 700; color: var(--sub); }
+body[data-screen="settings"] .set-group-name { margin: 2px 0 14px; font-size: 28px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.25; }
+body[data-screen="settings"] .set-row {
+  display: flex; align-items: center; gap: 12px; min-height: 58px; padding: 10px 14px 10px 16px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow);
+  color: var(--ink); text-decoration: none;
+}
+body[data-screen="settings"] .set-row > .ic:first-child { color: var(--blue); }
+body[data-screen="settings"] .set-row > span { flex: 1; font-size: 16px; font-weight: 700; }
+body[data-screen="settings"] .set-row small { flex: none; color: var(--sub); font-size: 14px; }
+body[data-screen="settings"] .set-row > .ic:last-child { color: var(--faint); }
+body[data-screen="settings"] .set-label { margin: 24px 0 12px; font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+body[data-screen="settings"] .invite .code { font-size: 32px; }
+body[data-screen="settings"] .invite .btn-row .btn { white-space: nowrap; }
+body[data-screen="settings"] .invite-text { font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+body[data-screen="settings"] .member-list .set-member { padding: 0; }
+body[data-screen="settings"] .set-member-link {
+  display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: center; gap: 10px;
+  width: 100%; min-height: 48px; padding: 8px 0; color: var(--ink); text-decoration: none;
+}
+body[data-screen="settings"] .set-member-name { min-width: 0; font-size: 16px; font-weight: 700; line-height: 1.4; }
+body[data-screen="settings"] .member-list .status { display: inline-flex; align-items: center; gap: 4px; color: var(--blue); white-space: nowrap; }
+body[data-screen="settings"] .group-list { gap: 8px; }
+body[data-screen="settings"] .group-list li { min-width: 0; max-width: 100%; }
+body[data-screen="settings"] .group-list .chip { min-height: 44px; max-width: 100%; gap: 8px; text-align: left; }
+body[data-screen="settings"] .group-list .chip::after { display: none; }
+body[data-screen="settings"] .group-list .chip > span { min-width: 0; }
+body[data-screen="settings"] .group-list .chip > small { flex: none; white-space: nowrap; }
+body[data-screen="settings"] .stats-settings { margin-bottom: 24px; }
+body[data-screen="settings"] .stats-settings .sub-line { font-size: 14px; line-height: 1.5; }
+body[data-screen="settings"] .help { margin-bottom: 24px; }
+body[data-screen="settings"] .help p { font-size: 14px; line-height: 1.5; }
+body[data-screen="settings"] .member-list .btn.small, body[data-screen="settings"] .help .btn.small { min-height: 44px; }
+body[data-screen="settings"] .member-list .btn.small::after, body[data-screen="settings"] .help .btn.small::after { display: none; }
+body[data-screen="settings"] .help .row-label { color: var(--ink); }
+
+@media (max-width: 400px) {
+  .scr-me .me-title, .scr-records .rec-head .page-title { font-size: 30px; }
+  :is(.scr-me, .scr-profile) .me-stat { gap: 6px; }
+  :is(.scr-me, .scr-profile) .me-stat b { font-size: 18px; }
+}
+
+/* 사진 없는 자리(접시)는 가운데 정렬 격자로 */
+.scr-me .me-tile-photo.nophoto, .scr-records .rec-photo.nophoto, .scr-records .want-photo.nophoto { display: grid; place-items: center; }
+/* plate()의 인라인 --plate-size가 style 객체로는 안 들어가서 크기를 여기서 준다 */
+.scr-records .rec-main .plate { --plate-size: 76px; }
+.scr-records .rec-empty .plate, .scr-me .rec-empty .plate { --plate-size: 72px; }

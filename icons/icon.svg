@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <mask id="bite">
+      <rect width="512" height="512" fill="#fff"/>
+      <circle cx="360" cy="124" r="56" fill="#000"/>
+    </mask>
+    <clipPath id="plate"><circle cx="248" cy="272" r="179"/></clipPath>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#244BDB"/>
+  <g mask="url(#bite)" fill="none" stroke="#FFFFFF">
+    <circle cx="248" cy="272" r="168" stroke-width="22"/>
+    <circle cx="248" cy="272" r="137" stroke-width="10"/>
+  </g>
+  <circle cx="360" cy="124" r="56" fill="none" stroke="#FFFFFF" stroke-width="12" clip-path="url(#plate)"/>
+  <circle cx="368" cy="114" r="12" fill="#FFFFFF"/>
+</svg>

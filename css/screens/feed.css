@@ -1,0 +1,292 @@
+/* 모임 피드 · 같이 먹은 기록 · 글 상세 화면 (BLUE TABLE R07 v3 · R04 · R02 v2)
+   범위: .scr-feed(모임 탭) · .scr-meal(같이 먹은 기록) · .scr-detail(글 상세)
+   .post-card 는 postCard()만 만드는 클래스라 가게·프로필·네임드 화면에서도 같은 모양으로 보인다. */
+
+/* ---------- 상단바 오른쪽 내 아바타 ---------- */
+body[data-screen="feed"] .top-avatar {
+  display: inline-grid; place-items: center; min-width: 44px; min-height: 44px; border-radius: 50%; text-decoration: none;
+}
+body[data-screen="feed"] .top-avatar .avatar { font-size: 17px; box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--line); }
+
+/* ---------- 모임 피드 ---------- */
+body[data-screen="feed"] .topbar { padding-block: calc(env(safe-area-inset-top) + 4px) 4px; }
+body[data-screen="feed"] .demo-banner { padding-block: 4px; margin-bottom: 4px; }
+.scr-feed .group-pill { min-height: 44px; padding-block: 4px; margin-bottom: 8px; }
+.scr-feed .group-pill-name { white-space: normal; }
+.scr-feed .page-heading { margin: 4px 0 12px; }
+.scr-feed .page-heading .page-title { font-size: 30px; }
+.scr-feed .page-heading .sub-line { margin-top: 2px; font-size: 14px; color: var(--sub); }
+
+/* A 정리형: 오늘 현황은 한 줄, 상세는 제자리에서 펼친다. */
+.scr-feed .feed-status { margin: 0 0 8px; }
+.scr-feed .feed-status-bar {
+  display: flex; align-items: center; gap: 4px; min-height: 56px; padding: 6px;
+  background: var(--soft); border-radius: 16px;
+}
+.scr-feed .feed-status-toggle {
+  display: flex; align-items: center; gap: 6px; flex: 1; min-width: 44px; min-height: 44px; padding: 0 4px;
+  border: 0; border-radius: 10px; background: transparent; color: var(--ink); text-align: left; cursor: pointer;
+}
+.scr-feed .feed-status-avatars { flex: none; overflow: visible; }
+.scr-feed .feed-status-avatars .avatar { width: 24px; height: 24px; font-size: 14px; border-color: var(--soft); }
+.scr-feed .feed-status-avatars .avatar + .avatar { margin-left: -4px; }
+@media (max-width: 360px) {
+  .scr-feed .feed-status-avatars .avatar:nth-child(n+3) { display: none; }
+}
+.scr-feed .feed-status-copy { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; min-width: 0; }
+.scr-feed .feed-status-copy b { font-size: 14px; font-weight: 800; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.scr-feed .feed-tag-count { padding: 2px 5px; background: var(--paper); font-size: 14px; white-space: nowrap; }
+.scr-feed .feed-status-toggle > .ic { flex: none; margin-left: auto; color: var(--sub); }
+.scr-feed .feed-status-toggle[aria-expanded="true"] > .ic { transform: rotate(180deg); }
+.scr-feed .feed-status-post { flex: none; padding-inline: 8px; white-space: nowrap; }
+.scr-feed .feed-status-detail:not([hidden]) { display: grid; gap: 8px; margin-top: 8px; }
+.scr-feed .feed-status-detail > * { margin: 0; }
+.scr-feed .feed-status-detail .progress-top { min-height: 24px; }
+.scr-feed .feed-notices {
+  display: flex; align-items: center; gap: 8px; overflow-x: auto; margin: 0 0 4px; padding: 2px;
+  scrollbar-width: thin;
+}
+.scr-feed .feed-notice { gap: 4px; min-width: 44px; min-height: 44px; padding: 6px 10px; font-size: 14px; text-decoration: none; white-space: nowrap; }
+.scr-feed .feed-history-toggle { margin-top: 24px; min-height: 48px; }
+.scr-feed .feed-history-count { margin: 20px 0 8px; text-align: center; }
+.scr-feed .feed-history-next { min-height: 48px; margin-bottom: 16px; }
+/* 모임 선택기와 중복되는 아바타는 폰에서 접힌 상태에 반복하지 않는다.
+   멤버별 오늘 상태는 펼친 상세의 이름과 체크로 그대로 제공한다. */
+@media (max-width: 430px) {
+  .scr-feed .feed-status-avatars { display: none; }
+  .scr-feed .feed-status-copy { gap: 8px; }
+}
+.scr-feed .feed-recent-empty { margin: 24px 0 0; font-size: 15px; }
+
+/* 위쪽 안내 카드는 작게 — 사진 카드가 주인공 */
+.scr-feed .feed-guides { display: flex; flex-direction: column; gap: 8px; margin: 0 0 4px; }
+.scr-feed .feed-guides > * { margin: 0; }
+.scr-feed .feed-empty + .feed-guides { margin-top: 20px; }
+.scr-feed .progress { padding: 8px 14px; border-radius: 16px; box-shadow: none; }
+.scr-feed .progress b { font-size: 15px; }
+.scr-feed .progress-top { min-height: 44px; }
+.scr-feed .progress-top > b { min-width: 0; }
+.scr-feed .progress-top .btn { flex: none; }
+.scr-feed .progress .who { margin-top: 0; gap: 0 8px; }
+.scr-feed .progress .who li { min-width: 0; max-width: 100%; }
+.scr-feed .progress .person-link { gap: 6px; }
+.scr-feed .progress .who .avatar { width: 26px; height: 26px; }
+.scr-feed .tag-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; padding: 8px 14px; gap: 0 8px; }
+.scr-feed .tag-text { display: contents; }
+.scr-feed .tag-text > b, .scr-feed .tag-text > span { grid-column: 1; }
+.scr-feed .tag-text > small { grid-column: 1 / -1; }
+.scr-feed .tag-card > .btn { grid-column: 2; grid-row: 1 / 3; align-self: center; }
+.scr-feed .tag-text b { font-size: 15px; }
+.scr-feed .tag-text span { white-space: normal; overflow: visible; }
+.scr-feed .tag-text small { font-size: 14px; line-height: 1.4; }
+/* 안내 문장 안 이름은 주변 비조작 글 위로만 확장한다. 오른쪽 버튼과는 겹치지 않는다. */
+.scr-feed .tag-text .nick-link { position: relative; display: inline-block; min-width: 44px; }
+.scr-feed .tag-text .nick-link::after { content: ''; position: absolute; top: 50%; left: 0; width: max(44px, 100%); height: 44px; transform: translateY(-50%); }
+.scr-feed .btn.small { min-height: 44px; }
+.scr-feed .btn.small::after { content: none; }
+.scr-feed .invite-card.appt { padding: 12px 14px; }
+.scr-feed .invite-card.appt .inv-place { display: flex; align-items: center; flex-wrap: wrap; min-height: 44px; font-size: 17px; }
+.scr-feed .invite-card.appt .inv-head { align-items: center; }
+.scr-feed .challenge-mini.card { padding-block: 8px; }
+.scr-feed .report-banner { padding: 12px 14px; font-size: 15px; }
+
+.scr-feed .feed-polls { margin: 20px 0 0; }
+.scr-feed .feed-polls > * { margin-bottom: 12px; }
+
+/* 날짜 구역 제목 */
+.scr-feed .day { justify-content: space-between; margin: 20px 0 8px; font-size: 20px; }
+.scr-feed .day small { font-size: 14px; }
+
+/* 빈 모임(R02 v2 오른쪽) */
+.scr-feed .feed-empty { padding: 4px 0 8px; text-align: center; }
+.scr-feed .feed-empty .page-title { margin: 8px 0 16px; text-align: left; font-size: 30px; }
+.scr-feed .feed-empty-art {
+  width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 20px; background: var(--soft);
+}
+.scr-feed .feed-empty p { margin: 16px 0 14px; font-size: 15px; font-weight: 500; color: var(--ink); }
+.scr-feed .feed-empty .btn { margin: 0 0 10px; }
+
+/* ---------- 공동식사 카드(R07 v3) ---------- */
+.scr-feed .meal-card {
+  margin: 0 0 16px; padding: 0; overflow: hidden; cursor: pointer;
+  border-radius: 20px;
+}
+.scr-feed .meal-photos {
+  display: grid; gap: 4px; grid-template-columns: repeat(2, minmax(0, 1fr)); text-decoration: none;
+}
+.scr-feed .meal-photos.n1 { grid-template-columns: 1fr; }
+.scr-feed .meal-tile { position: relative; display: block; min-width: 0; }
+.scr-feed .meal-photo { display: grid; width: 100%; aspect-ratio: 1; border-radius: 0; }
+.scr-feed .meal-photos.n1 .meal-photo { aspect-ratio: 16 / 10; }
+.scr-feed .meal-more {
+  position: absolute; right: 10px; bottom: 10px;
+  min-width: 44px; padding: 4px 12px; border-radius: 999px; text-align: center;
+  background: var(--paper); color: var(--ink); font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums;
+  box-shadow: 0 2px 8px rgba(23, 42, 58, 0.18);
+}
+.scr-feed .meal-panel { padding: 12px 16px 6px; }
+.meal-who { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; min-width: 0; }
+.meal-who .avatar-stack .avatar { width: 36px; height: 36px; font-size: 15px; }
+.scr-feed .meal-names { font-size: 16px; font-weight: 700; min-width: 0; }
+.scr-feed .meal-kind { margin-left: auto; color: var(--sub); font-size: 13px; font-weight: 500; }
+.scr-feed .meal-place {
+  display: flex; align-items: center; min-height: 44px; margin: 8px 0 2px; font-size: 24px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.25;
+  color: var(--ink); text-decoration: none; white-space: normal;
+}
+.meal-area { display: flex; align-items: center; gap: 4px; color: var(--sub); font-size: 14px; font-weight: 500; }
+.meal-area .ic { color: var(--sub); }
+.scr-feed .meal-card .scores { margin: 12px 0 6px; }
+.scr-feed .meal-card .score b { font-size: 22px; }
+.scr-feed .meal-note { margin: 10px 0 0; font-size: 15px; color: var(--ink); }
+.scr-feed .meal-note, .scr-feed .post-card > .note {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}
+.scr-feed .meal-place .place-name, .scr-feed .post-place .place-name {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}
+.scr-feed .meal-cmt {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
+  color: var(--sub); font-size: 14px; font-weight: 600; text-decoration: none;
+}
+.scr-feed .meal-cmt .ic { color: var(--ink); }
+
+/* ---------- 혼자 올린 글(postCard, 여러 화면 공용) ---------- */
+.post.post-card {
+  display: block; margin: 0 0 12px; padding: 14px 16px 8px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow);
+}
+.post-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.post-head .avatar { font-size: 17px; }
+.post-card .person-link, .scr-feed .person-link, .scr-detail .person-link, .scr-meal .person-link {
+  display: inline-flex; align-items: center; gap: 10px; min-width: 44px; min-height: 44px; max-width: 100%; text-decoration: none;
+}
+.person-link .person-copy { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
+.person-link .person-name { overflow-wrap: anywhere; }
+.post-head .person-link { flex: 1; min-width: 0; font-size: 16px; font-weight: 700; }
+.post-head .person-link small { color: var(--sub); font-weight: 500; white-space: nowrap; }
+.post-head > .icon-btn { flex: none; }
+.post-head > .icon-btn { margin: -6px -10px -6px auto; }
+.post-card > .note { margin: 10px 0 10px; font-size: 15px; }
+.post-card .photo-link { display: block; border-radius: 14px; }
+.post-photo {
+  display: grid; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; background: var(--soft);
+}
+.post-card > .post-photo, .post-card > .photo-link { margin: 0 0 10px; }
+.post-card .post-body { min-width: 0; }
+.post-card .post-place { display: flex; flex-wrap: wrap; align-items: center; min-height: 44px; margin: 2px 0 2px; font-size: 20px; }
+.post-plate-row { display: flex; align-items: center; gap: 12px; margin: 10px 0 4px; }
+.post-plate-row .post-place { margin: 0; min-width: 0; }
+.post-plate-row .plate { --plate-size: 52px; }
+.post-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; }
+.post-tags:empty { display: none; }
+.post-tags .category-tag, .post-tags .post-verified { margin: 0; }
+.post-card .scores { margin: 10px 0 4px; }
+.post-card .score b { font-size: 18px; }
+.post-card .social { margin-top: 4px; }
+
+/* 시간·인증 이외의 읽는 정보는 14px, 이름·가게 링크는 실제 44px 영역. */
+.scr-feed .score i, .scr-detail .score i, .scr-meal .score i,
+.post-card .score i, .post-card .post-menu, .post-card .category-tag, .post-card .area,
+.scr-feed .area, .scr-detail .category-tag, .scr-meal .score-inline, .scr-meal .pill { font-size: 14px; }
+.post-card .with, .scr-detail .with, .scr-detail .react-who { font-size: 14px; }
+.post-card .with, .scr-detail .with, .scr-detail .react-who > span { display: flex; align-items: center; flex-wrap: wrap; gap: 0 4px; }
+.scr-feed .nick-link:not(.person-link), .post-card .nick-link:not(.person-link), .scr-detail .nick-link:not(.person-link) {
+  display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; max-width: 100%;
+}
+.scr-feed .tag-text .nick-link { display: inline-block; min-width: 0; min-height: 0; }
+.post-card .cmts a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; font-size: 14px; }
+.scr-feed .score-value, .post-card .score-value, .scr-detail .score-value, .scr-meal .score-value,
+.scr-meal .score-inline { flex-shrink: 0; white-space: nowrap; }
+
+/* ---------- 글 상세 ---------- */
+.scr-detail .detail { background: transparent; border: 0; box-shadow: none; border-radius: 0; overflow: visible; margin: 0 0 8px; }
+.scr-detail .detail-photo { border-radius: 20px; }
+.scr-detail .detail-photo.nophoto { aspect-ratio: 16 / 10; }
+.scr-detail .detail-body { padding: 16px 0 0; }
+.scr-detail .post-place.big {
+  display: inline-flex; align-items: center; gap: 2px; margin: 14px 0 2px; font-size: 26px; min-height: 44px;
+}
+.scr-detail .post-place.big .ic { color: var(--faint); }
+.scr-detail .post-tags { margin-top: 6px; }
+.scr-detail .scores { margin: 14px 0 8px; padding: 12px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.scr-detail .score b { font-size: 24px; }
+.scr-detail .note { font-size: 16px; margin: 12px 0 6px; }
+.scr-detail .post-menu { font-size: 14px; }
+.scr-detail .reacts { gap: 8px; }
+.scr-detail .react { min-height: 44px; padding: 4px 14px; background: var(--paper); border-color: var(--line); }
+.scr-detail .react::after { content: none; }
+.scr-detail .react.on { border-color: var(--blue); background: var(--soft); color: var(--blue); }
+.scr-detail .comments { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.scr-detail .section-title { margin: 0 0 4px; font-size: 18px; font-weight: 800; }
+.scr-detail .cmt-count { color: var(--blue); }
+.scr-detail .cmt-list li { gap: 12px; }
+.scr-detail .cmt-who { display: flex; align-items: center; gap: 4px 8px; flex-wrap: wrap; }
+.scr-detail .cmt-who .person-link { flex: 1; }
+.scr-detail .cmt-who small { flex: none; white-space: nowrap; }
+.scr-detail .cmt-body p { margin-left: 46px; }
+.scr-detail .cmt-list .icon-btn { flex: none; }
+.scr-detail .cmt-list .avatar { font-size: 15px; }
+.scr-detail .cmt-form { padding: 8px 0 0; }
+.scr-detail .cmt-form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]) {
+  min-height: 48px; border-radius: 999px; background: var(--soft); border-color: transparent; padding-inline: 18px;
+}
+.cmt-send {
+  flex: none; display: inline-grid; place-items: center; width: 48px; height: 48px; padding: 0;
+  border: 0; border-radius: 50%; background: var(--blue-fill); color: var(--on-blue); cursor: pointer;
+}
+.cmt-send:active { background: var(--blue-press); }
+.cmt-send:disabled { background: var(--soft-2); color: var(--faint); cursor: default; }
+
+/* ---------- 같이 먹은 기록(R04 가운데) ---------- */
+.scr-meal .screen-header { margin-bottom: 0; }
+.scr-meal .meal-hero { margin: 0 calc(-1 * var(--gutter)); }
+.scr-meal .meal-hero-photo { display: grid; width: 100%; aspect-ratio: 4 / 3; max-height: 380px; object-fit: cover; background: var(--soft); }
+.scr-meal .meal-sheet {
+  position: relative; margin: -22px calc(-1 * var(--gutter)) 0; padding: 14px var(--gutter) 8px;
+  background: var(--paper); border-radius: 22px 22px 0 0;
+}
+.scr-meal .meal-who small { color: var(--sub); font-size: 14px; font-weight: 600; }
+.scr-meal .meal-who .avatar-stack .avatar { border-color: var(--paper); }
+.scr-meal .meal-title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; flex-wrap: wrap; margin: 10px 0 2px; }
+.scr-meal .meal-title { margin: 0; min-width: 0; max-width: 100%; font-size: 26px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.3; }
+.scr-meal .meal-title a { display: flex; align-items: center; min-width: 44px; min-height: 44px; color: var(--ink); text-decoration: none; }
+.scr-meal .meal-title-row .pill { max-width: 100%; white-space: normal; }
+.scr-meal .scores { margin: 16px 0 8px; padding: 6px 0; }
+.scr-meal .score b { font-size: 26px; }
+.scr-meal .meal-friends-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 18px 0 2px; }
+.scr-meal .meal-friends-head h2 { margin: 0; font-size: 18px; font-weight: 800; }
+.scr-meal .meal-friends-head .btn.ghost { min-height: 44px; padding-inline: 4px; font-size: 15px; font-weight: 800; }
+.scr-meal .meal-friends { list-style: none; margin: 0; padding: 0; }
+.scr-meal .meal-friends li {
+  min-height: 44px; padding: 12px 0 4px; border-bottom: 1px solid var(--line);
+}
+.scr-meal .meal-friends li:last-child { border-bottom: 0; }
+.scr-meal .meal-friends .avatar { font-size: 18px; }
+.scr-meal .meal-friend-body { min-width: 0; }
+.scr-meal .meal-friend-top { display: flex; align-items: center; gap: 4px 8px; flex-wrap: wrap; }
+.scr-meal .meal-friend-top .nick-link, .scr-meal .meal-friend-top b { font-size: 16px; }
+.scr-meal .meal-friend-top .person-link { gap: 12px; flex: 1; }
+.scr-meal .meal-friend-top .post-verified { margin: 0; }
+.scr-meal .meal-friend-top small { flex: none; margin-left: auto; color: var(--sub); white-space: nowrap; }
+.scr-meal .meal-friends .note { margin: 2px 0 6px 56px; font-size: 15px; }
+.scr-meal .meal-friend-scores { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-left: 56px; }
+.scr-meal .meal-friend-actions { display: flex; align-items: center; gap: 8px; margin-left: 56px; }
+.scr-meal .mini-social { display: inline-flex; align-items: center; gap: 2px; min-width: 44px; min-height: 44px; font-size: 14px; }
+.scr-meal .meal-friend-actions .icon-btn { margin-left: auto; margin-right: -10px; }
+.scr-meal { padding-bottom: calc(97px + env(safe-area-inset-bottom)); }
+.scr-meal .meal-save-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: min(100%, var(--page-max)); z-index: 5;
+  padding: 12px var(--gutter) calc(env(safe-area-inset-bottom) + 16px);
+  background: var(--paper); border-top: 1px solid var(--line);
+}
+.scr-meal .meal-save { min-height: 52px; }
+
+@media (max-width: 400px) {
+  .scr-feed .page-heading .page-title, .scr-feed .feed-empty .page-title { font-size: 28px; }
+  .scr-meal .meal-title { font-size: 26px; }
+}
+
+@media (max-width: 350px) {
+  .scr-feed .tag-card { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+  .scr-feed .tag-card > .btn { grid-column: 1; grid-row: 4; justify-self: end; margin-top: 6px; }
+}
